@@ -197,3 +197,75 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ───────────────────────── Hani Roustom — Folio ───────────────────────── */
+
+:root {
+  /* 390px mobile design frame → 1 scale unit ≈ 10px at 390 */
+  --scale: 2.564vw;
+  --vg: calc(4 * var(--scale));
+  --display-fs: calc(3.2 * var(--scale));
+  --cta-fs: calc(1.8 * var(--scale));
+  --list-fs: calc(4.2 * var(--scale));
+}
+
+@media (min-width: 768px) {
+  :root {
+    /* 1440px desktop design frame → 1 scale unit ≈ 10px at 1440 */
+    --scale: 0.6944vw;
+    --vg: calc(6.4 * var(--scale));
+    --display-fs: calc(3.2 * var(--scale));
+    --cta-fs: calc(1.8 * var(--scale));
+    --list-fs: calc(4.6 * var(--scale));
+  }
+}
+
+.font-display {
+  font-family: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
+}
+
+.vt-rl {
+  writing-mode: vertical-rl;
+}
+.vt-reading-up {
+  transform: rotate(180deg);
+}
+
+/* underline that draws in from the left on hover */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  padding-bottom: 2px;
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* underline that is filled and empties on hover */
+.link-underline-filled {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-size: 100% 1px;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  padding-bottom: 2px;
+}
+.link-underline-filled:hover,
+.link-underline-filled:focus-visible {
+  background-size: 0% 1px;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
