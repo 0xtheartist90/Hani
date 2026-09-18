@@ -165,8 +165,8 @@ const HomeStory = () => {
 
             tl.to(track, { x: -journeyX, duration: journeyX });
             if (rect) tl.to(rect, { scale: 1, duration: holdDur }, '>');
-            tl.to(expandLeftRef.current, { x: -window.innerWidth * 0.55, duration: holdDur }, '<');
-            tl.to(expandRightRef.current, { x: window.innerWidth * 0.55, duration: holdDur }, '<');
+            tl.to(expandLeftRef.current, { y: -window.innerHeight * 0.55, duration: holdDur }, '<');
+            tl.to(expandRightRef.current, { y: window.innerHeight * 0.55, duration: holdDur }, '<');
             tl.to(track, { x: -totalX, duration: totalX - journeyX });
 
             masterST = tl.scrollTrigger ?? undefined;
@@ -255,7 +255,7 @@ const HomeStory = () => {
                         '--header-border': '#5a524d'
                     } as React.CSSProperties
                 }
-                className='fixed inset-x-0 top-0 z-[110] flex w-full flex-row items-center justify-between border-b border-[var(--header-border)] bg-[var(--header-bg)] px-5 py-4 text-[var(--header-text)] opacity-0 transition-[background-color,color,border-color] duration-500 ease-out md:inset-x-auto md:inset-y-0 md:left-0 md:bottom-0 md:w-16 md:flex-col md:justify-start md:border-b-0 md:border-r md:px-0 md:py-0'
+                className='fixed inset-x-0 top-0 z-[110] flex w-full flex-row items-center justify-between border-b border-[var(--header-border)] bg-[var(--header-bg)] px-5 py-4 text-[var(--header-text)] opacity-0 transition-[background-color,color,border-color] duration-500 ease-out md:inset-x-auto md:inset-y-0 md:right-0 md:bottom-0 md:w-16 md:flex-col md:justify-start md:border-b-0 md:border-l md:px-0 md:py-0'
                 aria-label='Global site header'>
                 {/* scroll progress line */}
                 <div
@@ -386,20 +386,25 @@ const HomeStory = () => {
                                 <h1
                                     data-name-heading
                                     className='font-display text-[calc(9*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(14*var(--scale))]'>
-                                    {SITE.name.map((word) => (
+                                    {SITE.name.map((word, wi) => (
                                         <span
                                             key={word}
-                                            className='-mt-[0.1em] block w-max overflow-hidden pt-[0.1em]'>
+                                            className={`-mt-[0.1em] block w-max overflow-hidden pt-[0.1em] ${wi === 1 ? 'italic md:pl-[1.1em]' : ''}`}>
                                             <span data-name-word className='block whitespace-nowrap'>
                                                 {word}
                                             </span>
                                         </span>
                                     ))}
                                 </h1>
+                                <p
+                                    data-hero-fade
+                                    className='mt-6 hidden w-max border-t border-[#5a524d] pt-3 text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] opacity-0 md:block'>
+                                    CEO — Friday Harbour Resort
+                                </p>
                             </div>
                             <p
                                 data-hero-fade
-                                className='absolute inset-x-5 top-24 z-[1] font-normal leading-[1.3] text-[calc(1.8*var(--scale))] opacity-0 md:inset-x-auto md:right-16 md:top-[calc(5.8*var(--scale))] md:w-[calc(40*var(--scale))] md:text-[length:var(--cta-fs)]'>
+                                className='absolute inset-x-5 top-24 z-[1] font-normal leading-[1.3] text-[calc(1.8*var(--scale))] opacity-0 md:inset-x-auto md:right-24 md:top-[calc(5.8*var(--scale))] md:w-[calc(36*var(--scale))] md:text-right md:text-[length:var(--cta-fs)]'>
                                 {SITE.tagline}
                             </p>
                             <p
@@ -418,13 +423,13 @@ const HomeStory = () => {
                             </p>
                             <p
                                 data-hero-fade
-                                className='absolute right-5 top-24 z-[1] hidden text-right text-[calc(1.8*var(--scale))] leading-[1.2] opacity-0 md:bottom-[calc(var(--vg)_+_calc(6*var(--scale)))] md:right-16 md:top-auto md:block md:whitespace-nowrap md:text-[length:var(--cta-fs)]'>
+                                className='absolute right-5 top-24 z-[1] hidden text-right text-[calc(1.8*var(--scale))] leading-[1.2] opacity-0 md:bottom-[calc(var(--vg)_+_calc(6*var(--scale)))] md:right-24 md:top-auto md:block md:whitespace-nowrap md:text-[length:var(--cta-fs)]'>
                                 {SITE.journeyLine}
                             </p>
                             <p
                                 data-hero-fade
-                                className='absolute bottom-12 right-5 z-[1] text-right font-display text-xl font-normal uppercase leading-none opacity-0 md:bottom-[var(--vg)] md:right-16 md:text-[length:var(--display-fs)]'>
-                                Scroll
+                                className='absolute bottom-12 right-5 z-[1] text-right font-display text-xl font-normal uppercase leading-none opacity-0 md:bottom-[var(--vg)] md:right-24 md:text-[length:var(--display-fs)]'>
+                                ( Scroll )
                             </p>
                         </section>
 
@@ -445,15 +450,15 @@ const HomeStory = () => {
                             }
                             aria-label='About'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className={chapterHeading}>Chapter I</p>
-                                <div className='flex w-full flex-col gap-5 md:absolute md:right-16 md:top-[var(--vg)] md:z-10 md:w-[calc(61.4*var(--scale))]'>
+                                <p className={chapterHeading}>№ 01 — The Person</p>
+                                <div className='flex w-full flex-col gap-5 md:absolute md:right-24 md:top-[var(--vg)] md:z-10 md:w-[calc(58*var(--scale))]'>
                                     <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.2]'>{ABOUT.label}</p>
                                     <p className='text-2xl font-medium leading-[1.3] md:text-[length:var(--display-fs)]'>
                                         {ABOUT.intro}
                                     </p>
                                 </div>
                                 <a
-                                    className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:left-[calc(100%_-_calc(6.4*var(--scale))_-_calc(61.4*var(--scale)))] md:z-10 md:text-[length:var(--cta-fs)]'
+                                    className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-24 md:z-10 md:text-[length:var(--cta-fs)]'
                                     href={SITE.linkedin}
                                     target='_blank'
                                     rel='noreferrer'>
@@ -462,8 +467,12 @@ const HomeStory = () => {
                                 </a>
                                 <div className='flex w-full flex-col items-center gap-6 md:contents'>
                                     {/* portrait placeholder */}
-                                    <div
-                                        className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:absolute md:bottom-[var(--vg)] md:right-16 md:z-0 md:aspect-auto md:h-[var(--portrait-h)] md:w-[var(--portrait-w)]'>
+                                    <div className='relative w-full md:absolute md:bottom-[var(--vg)] md:left-32 md:z-0 md:h-[var(--portrait-h)] md:w-[var(--portrait-w)]'>
+                                    <span
+                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#b8b3ac] md:block'
+                                        aria-hidden='true'
+                                    />
+                                    <div className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:aspect-auto md:size-full'>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={PORTRAIT_IMAGE}
@@ -472,7 +481,8 @@ const HomeStory = () => {
                                             loading='lazy'
                                         />
                                     </div>
-                                    <blockquote className='w-full border-0 p-0 text-[calc(1.1*var(--scale))] font-normal uppercase not-italic leading-[1.4] md:absolute md:left-[calc(100%_-_calc(6.4*var(--scale))_-_calc(61.4*var(--scale)))] md:top-[var(--portrait-top)] md:z-10 md:w-[calc(16*var(--scale))]'>
+                                    </div>
+                                    <blockquote className='w-full border-0 p-0 text-[calc(1.1*var(--scale))] font-normal uppercase not-italic leading-[1.4] md:absolute md:left-[calc(8rem_+_var(--portrait-w)_+_calc(4*var(--scale)))] md:top-[var(--portrait-top)] md:z-10 md:w-[calc(16*var(--scale))]'>
                                         {ABOUT.quote.map((line) => (
                                             <span key={line} className='block'>
                                                 {line}
@@ -480,7 +490,7 @@ const HomeStory = () => {
                                         ))}
                                     </blockquote>
                                 </div>
-                                <p className='hidden text-base font-normal leading-[1.4] md:absolute md:bottom-[var(--vg)] md:left-32 md:block md:max-w-[calc(29.4*var(--scale))]'>
+                                <p className='hidden text-base font-normal leading-[1.4] md:absolute md:bottom-[calc(var(--vg)_+_calc(8*var(--scale)))] md:right-24 md:block md:max-w-[calc(29.4*var(--scale))] md:text-right'>
                                     {ABOUT.beyond}
                                 </p>
                             </div>
@@ -514,7 +524,7 @@ const HomeStory = () => {
                                     />
                                 </div>
                             </div>
-                            <div className='relative z-20 flex flex-1 items-center justify-center md:flex-initial md:gap-16 md:px-4'>
+                            <div className='relative z-20 flex flex-1 items-center justify-center md:flex-initial md:flex-col md:gap-10 md:px-4'>
                                 <p
                                     ref={expandLeftRef}
                                     className='absolute bottom-[calc(50%_+_calc(1.6*var(--scale)))] left-1/2 z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:bottom-auto md:left-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))]'>
@@ -536,7 +546,7 @@ const HomeStory = () => {
                                 </div>
                                 <p
                                     ref={expandRightRef}
-                                    className='absolute left-1/2 top-[calc(50%_+_calc(1.6*var(--scale)))] z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:left-auto md:top-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))]'>
+                                    className='absolute left-1/2 top-[calc(50%_+_calc(1.6*var(--scale)))] z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:left-auto md:top-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))] md:italic'>
                                     Journey
                                 </p>
                             </div>
@@ -552,8 +562,8 @@ const HomeStory = () => {
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
                             aria-label='Defining chapters'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className={chapterHeading}>Chapter II</p>
-                                <div className='flex flex-col gap-2.5 md:absolute md:right-16 md:top-[var(--vg)] md:w-full md:max-w-[calc(61.2*var(--scale))]'>
+                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
+                                <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(61.2*var(--scale))]'>
                                     <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Defining chapters
                                     </p>
@@ -565,6 +575,9 @@ const HomeStory = () => {
                                                 onMouseEnter={() => setHoveredWork(i)}
                                                 onMouseLeave={() => setHoveredWork(null)}>
                                                 <div className='flex cursor-default items-center justify-between gap-4 py-2.5'>
+                                                    <span className='hidden w-10 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
+                                                        0{i + 1}
+                                                    </span>
                                                     <span className='min-w-0 flex-1'>
                                                         {item.title}
                                                         <span className='mt-1 block text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-sm'>
@@ -582,19 +595,19 @@ const HomeStory = () => {
                                     </ul>
                                 </div>
                                 <a
-                                    className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-16 md:text-[length:var(--cta-fs)]'
+                                    className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:left-32 md:text-[length:var(--cta-fs)]'
                                     href={SITE.linkedin}
                                     target='_blank'
                                     rel='noreferrer'>
                                     View full journey
                                     <ArrowForward className='size-5 shrink-0 md:size-6' />
                                 </a>
-                                <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] text-[#1a1a1a] md:absolute md:bottom-[var(--vg)] md:left-[calc(100%_-_calc(6.4*var(--scale))_-_calc(61.2*var(--scale)))] md:max-w-[calc(29.4*var(--scale))]'>
+                                <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] text-[#1a1a1a] md:absolute md:bottom-[calc(var(--vg)_+_calc(3.4*var(--scale)))] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
                                     ❋ Highlights from 25+ years in luxury hospitality
                                 </p>
                                 {/* hover preview */}
                                 <div
-                                    className='relative isolate hidden w-full max-w-[calc(40.1*var(--scale))] shrink-0 overflow-hidden md:absolute md:bottom-[var(--vg)] md:left-32 md:block'
+                                    className='relative isolate hidden w-full max-w-[calc(40.1*var(--scale))] shrink-0 overflow-hidden md:absolute md:bottom-[var(--vg)] md:right-24 md:block'
                                     aria-hidden='true'>
                                     <svg viewBox='0 0 401 225' fill='none' className='h-auto w-full'>
                                         <rect x='0.5' y='0.5' width='400' height='224' stroke='#B8B3AC' />
@@ -639,7 +652,7 @@ const HomeStory = () => {
                             <div className='flex w-full flex-col md:min-h-0 md:w-max md:flex-1 md:flex-row md:items-stretch md:pl-16'>
                                 <div className='mb-12 flex flex-col gap-10 px-5 md:mb-0 md:w-[calc(63.6*var(--scale))] md:min-h-0 md:shrink-0 md:justify-between md:gap-0 md:px-0 md:py-[var(--vg)] md:pr-6'>
                                     <p className='font-display text-lg font-normal uppercase leading-none md:text-2xl'>
-                                        Chapter III
+                                        № 03 — The Craft
                                     </p>
                                     <div className='flex flex-col gap-5'>
                                         <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.2]'>
@@ -650,12 +663,12 @@ const HomeStory = () => {
                                         </p>
                                     </div>
                                 </div>
-                                {SERVICES.map((service) => (
+                                {SERVICES.map((service, si) => (
                                     <article
                                         key={service.num}
-                                        className='group relative flex h-[70dvh] w-full flex-col justify-between gap-10 overflow-hidden border-t border-[#5f5a54] px-5 py-8 first-of-type:border-t md:h-full md:w-[calc(40*var(--scale))] md:shrink-0 md:gap-0 md:border-l md:border-t-0 md:p-[var(--vg)]'>
+                                        className={`group relative flex h-[70dvh] w-full flex-col justify-between gap-10 overflow-hidden border-t border-[#5f5a54] px-5 py-8 first-of-type:border-t md:h-full md:w-[calc(40*var(--scale))] md:shrink-0 md:gap-0 md:border-l md:border-t-0 md:p-[var(--vg)] ${si % 2 === 1 ? 'md:flex-col-reverse' : ''}`}>
                                         <div
-                                            className='absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] [clip-path:inset(100%_0%_0%)] group-hover:[clip-path:inset(0%_0%_0%)]'
+                                            className={`absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] group-hover:[clip-path:inset(0%_0%_0%)] ${si % 2 === 1 ? '[clip-path:inset(0%_0%_100%)]' : '[clip-path:inset(100%_0%_0%)]'}`}
                                             aria-hidden='true'>
                                             <div className='absolute inset-0 z-[1] bg-[#1f1d1b]/60' />
                                             <div className='size-full' style={{ background: service.gradient }}>
@@ -692,23 +705,29 @@ const HomeStory = () => {
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
                             aria-label='Selected experiences'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-10 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className={chapterHeading}>Chapter IV</p>
-                                <div className='w-full md:absolute md:right-32 md:top-[var(--vg)] md:max-w-[calc(61.2*var(--scale))]'>
+                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Company</p>
+                                <div className='w-full md:absolute md:left-32 md:top-[var(--vg)] md:max-w-[calc(68*var(--scale))]'>
                                     <p className='mb-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Selected experiences
                                     </p>
-                                    <ul className='flex min-w-0 flex-col gap-1 text-[calc(4.2*var(--scale))] font-medium leading-[1.2] md:text-[length:var(--list-fs)]'>
-                                        {EXPERIENCES.map((name) => (
+                                    <ul className='flex min-w-0 flex-col text-[calc(4.2*var(--scale))] font-medium leading-[1.2] md:text-[length:var(--list-fs)]'>
+                                        {EXPERIENCES.map((exp, ei) => (
                                             <li
-                                                key={name}
-                                                className='cursor-default opacity-90 transition-[opacity,transform] duration-300 ease-out hover:translate-x-2 hover:opacity-100'>
-                                                {name}
+                                                key={exp.name}
+                                                className='flex cursor-default items-baseline gap-6 border-t border-[#b8b3ac] py-3 opacity-90 transition-[opacity,padding] duration-300 ease-out first:border-t-0 hover:pl-3 hover:opacity-100'>
+                                                <span className='hidden w-10 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
+                                                    0{ei + 1}
+                                                </span>
+                                                <span className='min-w-0 flex-1'>{exp.name}</span>
+                                                <span className='shrink-0 text-sm font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-base'>
+                                                    {exp.years}
+                                                </span>
                                             </li>
                                         ))}
-                                        <li className='opacity-50'>And more</li>
+                                        <li className='border-t border-[#b8b3ac] py-3 opacity-50'>And more</li>
                                     </ul>
                                 </div>
-                                <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:bottom-[var(--vg)] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
+                                <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:bottom-[var(--vg)] md:right-24 md:max-w-[calc(29.4*var(--scale))] md:text-right'>
                                     A career spanning hotels, resorts,
                                     <br />
                                     and destinations.
@@ -728,18 +747,18 @@ const HomeStory = () => {
                             aria-label='Contact'>
                             <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-10 px-5 pb-5 pt-14 md:min-h-0 md:px-0 md:py-0'>
                                 <div className='flex flex-col gap-5 md:contents'>
-                                    <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:bottom-[var(--vg)] md:right-16 md:whitespace-nowrap md:text-right'>
+                                    <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:left-1/2 md:top-[var(--vg)] md:-translate-x-1/2 md:whitespace-nowrap md:text-center'>
                                         Where journeys become destinations
                                     </p>
-                                    <div className='w-full leading-none md:absolute md:left-32 md:top-[var(--vg)] md:max-w-[calc(80.2*var(--scale))]'>
-                                        <h2 className='font-display text-[calc(7*var(--scale))] uppercase leading-none tracking-[-0.04em] md:text-[calc(18.1*var(--scale))]'>
+                                    <div className='w-full leading-none md:absolute md:left-1/2 md:top-1/2 md:w-max md:max-w-none md:-translate-x-1/2 md:-translate-y-[62%]'>
+                                        <h2 className='font-display text-[calc(7*var(--scale))] uppercase leading-none tracking-[-0.04em] md:text-center md:text-[calc(16*var(--scale))]'>
                                             <span className='block'>Next</span>
-                                            <span className='block'>chapter</span>
+                                            <span className='block italic'>chapter</span>
                                         </h2>
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-10 md:contents'>
-                                    <div className='flex flex-col gap-4 md:absolute md:bottom-[var(--vg)] md:left-32'>
+                                    <div className='flex flex-col gap-4 md:absolute md:bottom-[calc(var(--vg)_+_calc(10*var(--scale)))] md:left-1/2 md:-translate-x-1/2 md:items-center'>
                                         <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                             Contact to
                                         </p>
@@ -754,7 +773,7 @@ const HomeStory = () => {
                                             social
                                         </p>
                                         <nav
-                                            className='flex flex-col gap-1 text-2xl font-medium leading-[1.2] md:absolute md:right-16 md:top-[var(--vg)] md:flex-row md:gap-6 md:text-base'
+                                            className='flex flex-col gap-1 text-2xl font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-24 md:flex-row md:gap-6 md:text-base'
                                             aria-label='Social'>
                                             <a
                                                 className='link-underline w-fit'
@@ -765,7 +784,7 @@ const HomeStory = () => {
                                             </a>
                                         </nav>
                                     </div>
-                                    <p className='hidden text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40 md:absolute md:bottom-4 md:left-32 md:block'>
+                                    <p className='hidden text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40 md:absolute md:bottom-[var(--vg)] md:left-32 md:block md:max-w-[calc(30*var(--scale))]'>
                                         {PHOTO_CREDITS}
                                     </p>
                                     <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4] md:hidden'>

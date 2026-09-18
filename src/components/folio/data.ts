@@ -85,9 +85,9 @@ export const PHOTO_CREDITS =
     'Photos: Friday Harbour Resort (courtesy) · Ramosc55, JK Liu (CC BY-SA 4.0) · Canmenwalker (CC BY 4.0) · Pexels';
 
 export const EXPERIENCES = [
-    'Four Seasons',
-    'Shangri-La',
-    'The Hazelton',
-    'Friday Harbour',
-    'Cornell University'
+    { name: 'Cornell University', years: '2004 — 2006' },
+    { name: 'Four Seasons', years: '2006 — 2013' },
+    { name: 'Shangri-La', years: '2013 — 2016' },
+    { name: 'The Hazelton', years: '2016 — 2021' },
+    { name: 'Friday Harbour', years: '2021 — Present' }
 ];
