@@ -23,6 +23,7 @@ export const JOURNEY_ITEMS = [
     {
         title: 'Friday Harbour Resort',
         meta: 'CEO · 2021 — Present',
+        image: '/images/friday-harbour-boardwalk.jpg',
         gradient: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 55%, #8fb0ba 100%)'
     },
     {
@@ -33,6 +34,7 @@ export const JOURNEY_ITEMS = [
     {
         title: 'Shangri-La Toronto',
         meta: 'Executive Team, F&B · 2013 — 2016',
+        image: '/images/shangri-la-toronto.jpg',
         gradient: 'linear-gradient(135deg, #1f2420 0%, #3c4a3e 55%, #94a687 100%)'
     },
     {
@@ -47,12 +49,14 @@ export const SERVICES = [
         num: '01',
         title: 'Destination Development',
         text: 'Shaping resorts and communities into all-season destinations people return to.',
+        image: '/images/friday-harbour-nest.jpg',
         gradient: 'linear-gradient(160deg, #14202a 0%, #2d4a5c 60%, #6d95a8 100%)'
     },
     {
         num: '02',
         title: 'Luxury Hospitality',
         text: 'Service excellence honed at Four Seasons, Shangri-La, and The Hazelton.',
+        image: '/images/luxury-service.jpg',
         gradient: 'linear-gradient(160deg, #241a12 0%, #533b23 60%, #a8814f 100%)'
     },
     {
@@ -65,9 +69,15 @@ export const SERVICES = [
         num: '04',
         title: 'Mentorship & Education',
         text: 'Developing the next generation of hospitality leaders, from classrooms to boardrooms.',
+        image: '/images/mentorship.jpg',
         gradient: 'linear-gradient(160deg, #1d1424 0%, #3f2c53 60%, #8a6da8 100%)'
     }
 ];
+
+export const HERO_IMAGE = '/images/friday-harbour-marina.jpg';
+
+export const PHOTO_CREDITS =
+    'Photos: Friday Harbour by Ramosc55 (CC BY-SA 4.0) · Shangri-La Toronto by JK Liu (CC BY-SA 4.0) · Hert Niks & Max Fischer via Pexels';
 
 export const EXPERIENCES = [
     'Four Seasons',

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ABOUT, EXPERIENCES, JOURNEY_ITEMS, SERVICES, SITE } from '@/components/folio/data';
+import { ABOUT, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, SERVICES, SITE } from '@/components/folio/data';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -497,8 +497,15 @@ const HomeStory = () => {
                                     style={{
                                         transformOrigin: '50% 50%',
                                         background: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 60%, #8fb0ba 100%)'
-                                    }}
-                                />
+                                    }}>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={HERO_IMAGE}
+                                        alt=''
+                                        className='size-full object-cover object-center'
+                                        loading='lazy'
+                                    />
+                                </div>
                             </div>
                             <div className='relative z-20 flex flex-1 items-center justify-center md:flex-initial md:gap-16 md:px-4'>
                                 <p
@@ -507,12 +514,19 @@ const HomeStory = () => {
                                     The
                                 </p>
                                 <div
-                                    className='pointer-events-none absolute left-1/2 top-1/2 z-10 h-[calc(15.2*var(--scale))] w-[calc(8.5*var(--scale))] -translate-x-1/2 -translate-y-1/2 md:hidden'
+                                    className='pointer-events-none absolute left-1/2 top-1/2 z-10 h-[calc(15.2*var(--scale))] w-[calc(8.5*var(--scale))] -translate-x-1/2 -translate-y-1/2 overflow-hidden md:hidden'
                                     aria-hidden='true'
                                     style={{
                                         background: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 60%, #8fb0ba 100%)'
-                                    }}
-                                />
+                                    }}>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={HERO_IMAGE}
+                                        alt=''
+                                        className='size-full object-cover object-center'
+                                        loading='lazy'
+                                    />
+                                </div>
                                 <p
                                     ref={expandRightRef}
                                     className='absolute left-1/2 top-[calc(50%+calc(1.6*var(--scale)))] z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:left-auto md:top-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))]'>
@@ -582,13 +596,22 @@ const HomeStory = () => {
                                     {JOURNEY_ITEMS.map((item, i) => (
                                         <div
                                             key={item.title}
-                                            className='pointer-events-none absolute inset-0 flex origin-center items-end p-5 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)]'
+                                            className='pointer-events-none absolute inset-0 flex origin-center items-end overflow-hidden p-5 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)]'
                                             style={{
                                                 background: item.gradient,
                                                 opacity: hoveredWork === i ? 1 : 0,
                                                 transform: hoveredWork === i ? 'scale(1)' : 'scale(0.85)'
                                             }}>
-                                            <span className='font-display text-2xl uppercase leading-none text-[#faf9f6]/90'>
+                                            {item.image ? (
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                <img
+                                                    src={item.image}
+                                                    alt=''
+                                                    className='absolute inset-0 size-full object-cover object-center'
+                                                    loading='lazy'
+                                                />
+                                            ) : null}
+                                            <span className='relative z-[1] font-display text-2xl uppercase leading-none text-[#faf9f6]/90 [text-shadow:0_1px_12px_rgba(0,0,0,.45)]'>
                                                 {item.title}
                                             </span>
                                         </div>
@@ -628,7 +651,17 @@ const HomeStory = () => {
                                             className='absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] [clip-path:inset(100%_0%_0%)] group-hover:[clip-path:inset(0%_0%_0%)]'
                                             aria-hidden='true'>
                                             <div className='absolute inset-0 z-[1] bg-[#1f1d1b]/60' />
-                                            <div className='size-full' style={{ background: service.gradient }} />
+                                            <div className='size-full' style={{ background: service.gradient }}>
+                                                {service.image ? (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img
+                                                        src={service.image}
+                                                        alt=''
+                                                        className='size-full object-cover object-center'
+                                                        loading='lazy'
+                                                    />
+                                                ) : null}
+                                            </div>
                                         </div>
                                         <p className='font-display text-[calc(7*var(--scale))] leading-none md:text-[calc(9*var(--scale))] md:leading-[1.3] md:tracking-[-0.024em]'>
                                             {service.num}
@@ -725,9 +758,15 @@ const HomeStory = () => {
                                             </a>
                                         </nav>
                                     </div>
-                                    <div className='flex items-start justify-between border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4] md:hidden'>
-                                        <p>© 2026 — hani roustom</p>
-                                        <p>folio — edition</p>
+                                    <p className='hidden text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40 md:absolute md:bottom-4 md:left-32 md:block'>
+                                        {PHOTO_CREDITS}
+                                    </p>
+                                    <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4] md:hidden'>
+                                        <div className='flex items-start justify-between'>
+                                            <p>© 2026 — hani roustom</p>
+                                            <p>folio — edition</p>
+                                        </div>
+                                        <p className='text-[#ccc]/40'>{PHOTO_CREDITS}</p>
                                     </div>
                                 </div>
                             </div>
