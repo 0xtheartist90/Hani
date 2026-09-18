@@ -228,7 +228,7 @@ const HomeStory = () => {
     const chapterHeading = 'font-display text-lg font-normal uppercase leading-none md:absolute md:left-32 md:top-[var(--vg)] md:text-2xl';
 
     return (
-        <div ref={rootRef} className='bg-[#edeae6] text-[#2e2b28]'>
+        <div ref={rootRef} className='grain bg-[#edeae6] text-[#2e2b28]'>
             {/* ── Fixed header: top bar on mobile, left rail on desktop ── */}
             <header
                 ref={headerRef}
@@ -298,7 +298,7 @@ const HomeStory = () => {
                     Close
                 </button>
                 <div className='flex min-h-0 flex-1 flex-col justify-between px-5 pb-6 pt-24 md:px-32 md:pb-[var(--vg)] md:pt-[var(--vg)] md:justify-center md:gap-[3.6vh]'>
-                    <nav className='flex flex-col gap-6 xl:gap-[3.6vh]' aria-label='Primary'>
+                    <nav className='flex flex-col gap-6 md:items-end xl:gap-[3.6vh]' aria-label='Primary'>
                         {[
                             { n: '01.', label: 'Home', id: 'home' },
                             { n: '02.', label: 'About', id: 'about' },
@@ -309,7 +309,7 @@ const HomeStory = () => {
                                 key={item.id}
                                 type='button'
                                 onClick={() => openNav(item.id)}
-                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(6.8*var(--scale))] text-[#faf9f6] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:text-[min(18vh,12vw)] xl:gap-6'>
+                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(6.8*var(--scale))] text-[#faf9f6] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:flex-row-reverse md:text-right md:text-[min(18vh,12vw)] xl:gap-6'>
                                 <span className='w-6 shrink-0 font-display text-[0.3em] font-normal leading-[1.2] md:w-auto'>
                                     {item.n}
                                 </span>
@@ -373,7 +373,7 @@ const HomeStory = () => {
                                     {SITE.name.map((word, wi) => (
                                         <span
                                             key={word}
-                                            className={`-mt-[0.1em] block w-max overflow-hidden pt-[0.1em] ${wi === 1 ? 'italic' : ''}`}>
+                                            className={`-ml-[0.06em] -mt-[0.1em] -mr-[0.12em] block w-max overflow-hidden pt-[0.1em] pl-[0.06em] pr-[0.12em] ${wi === 1 ? 'italic' : ''}`}>
                                             <span data-name-word className='block whitespace-nowrap'>
                                                 {word}
                                             </span>
@@ -562,9 +562,12 @@ const HomeStory = () => {
                                                     </span>
                                                     <span className='min-w-0 flex-1'>
                                                         {item.title}
-                                                        <span className='mt-1 block text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-sm'>
+                                                        <span className='mt-1 block text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:hidden'>
                                                             {item.meta}
                                                         </span>
+                                                    </span>
+                                                    <span className='hidden shrink-0 text-sm font-normal uppercase tracking-wide text-[#2e2b28]/60 md:block'>
+                                                        {item.meta}
                                                     </span>
                                                     <ArrowUpRight className='hidden size-8 shrink-0 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 md:block md:size-14 md:-translate-x-2' />
                                                 </div>
@@ -665,7 +668,9 @@ const HomeStory = () => {
                                                 ) : null}
                                             </div>
                                         </div>
-                                        <p className='font-display text-[calc(7*var(--scale))] leading-none md:text-[calc(9*var(--scale))] md:leading-[1.3] md:tracking-[-0.024em]'>
+                                        <p
+                                            className='font-display text-[calc(7*var(--scale))] leading-none text-transparent md:text-[calc(11*var(--scale))] md:leading-[1.1] md:tracking-[-0.024em]'
+                                            style={{ WebkitTextStroke: '1px #faf9f6' }}>
                                             {service.num}
                                         </p>
                                         <p className='font-display text-[calc(3.2*var(--scale))] font-normal uppercase leading-[1.3] md:text-[length:var(--display-fs)] md:leading-[1.2]'>
@@ -727,7 +732,23 @@ const HomeStory = () => {
                             data-hborder='#5a524d'
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#1f1d1b] text-[#ccc] md:h-dvh'
                             aria-label='Contact'>
-                            <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-10 px-5 pb-5 pt-14 md:min-h-0 md:px-0 md:py-0'>
+                            <div
+                                className='pointer-events-none absolute inset-x-0 top-14 z-[2] overflow-hidden border-y border-[#3a3632] py-3 md:top-0'
+                                aria-hidden='true'>
+                                <div className='marquee-track flex w-max gap-12 whitespace-nowrap text-[calc(1.1*var(--scale))] uppercase tracking-[0.18em] text-[#ccc]/50'>
+                                    {Array.from({ length: 2 }).map((_, mi) => (
+                                        <span key={mi} className='flex gap-12'>
+                                            <span>Hospitality is an act of love</span>
+                                            <span>✳</span>
+                                            <span>Success follows excellence</span>
+                                            <span>✳</span>
+                                            <span>Creating destinations, not just hotels</span>
+                                            <span>✳</span>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-10 px-5 pb-5 pt-24 md:min-h-0 md:px-0 md:py-0'>
                                 <div className='flex flex-col gap-5 md:contents'>
                                     <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:left-1/2 md:top-[var(--vg)] md:-translate-x-1/2 md:whitespace-nowrap md:text-center'>
                                         Where journeys become destinations
