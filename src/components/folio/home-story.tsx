@@ -44,23 +44,7 @@ const HomeStory = () => {
     const navigateRef = useRef<(id: string) => void>(() => {});
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [clock, setClock] = useState('00:00');
     const [hoveredWork, setHoveredWork] = useState<number | null>(null);
-
-    /* live clock */
-    useEffect(() => {
-        const fmt = new Intl.DateTimeFormat('en-CA', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-            timeZone: SITE.timezone
-        });
-        const tick = () => setClock(fmt.format(new Date()));
-        tick();
-        const id = setInterval(tick, 15_000);
-
-        return () => clearInterval(id);
-    }, []);
 
     /* lenis + gsap orchestration */
     useEffect(() => {
@@ -385,11 +369,11 @@ const HomeStory = () => {
                             <div className='absolute inset-x-5 bottom-8 z-[1] md:inset-x-auto md:bottom-auto md:left-32 md:top-[var(--vg)]'>
                                 <h1
                                     data-name-heading
-                                    className='font-display text-[calc(9*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(14*var(--scale))]'>
+                                    className='font-display text-[calc(10.5*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(17.5*var(--scale))]'>
                                     {SITE.name.map((word, wi) => (
                                         <span
                                             key={word}
-                                            className={`-mt-[0.1em] block w-max overflow-hidden pt-[0.1em] ${wi === 1 ? 'italic md:pl-[1.1em]' : ''}`}>
+                                            className={`-mt-[0.1em] block w-max overflow-hidden pt-[0.1em] ${wi === 1 ? 'italic' : ''}`}>
                                             <span data-name-word className='block whitespace-nowrap'>
                                                 {word}
                                             </span>
@@ -409,11 +393,9 @@ const HomeStory = () => {
                             </p>
                             <p
                                 data-hero-fade
-                                className='absolute bottom-12 left-5 z-[1] hidden text-base font-normal leading-[1.4] opacity-0 md:bottom-[var(--vg)] md:left-32 md:block'>
-                                <span className='block'>{SITE.location}</span>
-                                <span className='block tabular-nums'>
-                                    {SITE.timezoneLabel} {clock}
-                                </span>
+                                className='absolute bottom-12 left-5 z-[1] hidden text-base font-normal leading-[1.5] opacity-0 md:bottom-[var(--vg)] md:left-32 md:block'>
+                                <span className='block'>25+ years in luxury hospitality</span>
+                                <span className='block text-[#f3eee8]/60'>70+ countries · 6 languages</span>
                             </p>
                             <p
                                 data-hero-fade
