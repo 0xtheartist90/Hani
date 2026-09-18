@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ABOUT, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, SERVICES, SITE } from '@/components/folio/data';
+import { ABOUT, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, PORTRAIT_IMAGE, SERVICES, SITE } from '@/components/folio/data';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -141,12 +141,7 @@ const HomeStory = () => {
             holdDur = window.innerHeight * 0.7;
 
             const rect = expandRectRef.current;
-            let coverScale = 8;
-            if (rect) {
-                const r = rect.getBoundingClientRect();
-                coverScale = Math.max(window.innerWidth / r.width, window.innerHeight / r.height) * 1.05;
-                gsap.set(rect, { scale: 0 });
-            }
+            if (rect) gsap.set(rect, { scale: 0 });
 
             const tl = gsap.timeline({
                 defaults: { ease: 'none' },
@@ -169,7 +164,7 @@ const HomeStory = () => {
             });
 
             tl.to(track, { x: -journeyX, duration: journeyX });
-            if (rect) tl.to(rect, { scale: coverScale, duration: holdDur }, '>');
+            if (rect) tl.to(rect, { scale: 1, duration: holdDur }, '>');
             tl.to(expandLeftRef.current, { x: -window.innerWidth * 0.55, duration: holdDur }, '<');
             tl.to(expandRightRef.current, { x: window.innerWidth * 0.55, duration: holdDur }, '<');
             tl.to(track, { x: -totalX, duration: totalX - journeyX });
@@ -471,9 +466,9 @@ const HomeStory = () => {
                                         className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:absolute md:bottom-[var(--vg)] md:right-16 md:z-0 md:aspect-auto md:h-[var(--portrait-h)] md:w-[var(--portrait-w)]'>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
-                                            src='/images/friday-harbour-marina.jpg'
-                                            alt='Friday Harbour marina on Lake Simcoe'
-                                            className='size-full object-cover object-center'
+                                            src={PORTRAIT_IMAGE}
+                                            alt='Portrait of Hani Roustom'
+                                            className='size-full object-cover object-top'
                                             loading='lazy'
                                         />
                                     </div>
@@ -505,7 +500,7 @@ const HomeStory = () => {
                                 aria-hidden='true'>
                                 <div
                                     ref={expandRectRef}
-                                    className='h-[calc(14*var(--scale))] w-[calc(24.9*var(--scale))] overflow-hidden will-change-transform'
+                                    className='h-dvh w-screen overflow-hidden will-change-transform'
                                     style={{
                                         transformOrigin: '50% 50%',
                                         background: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 60%, #8fb0ba 100%)'

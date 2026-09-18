@@ -27,7 +27,8 @@ export const metadata: Metadata = {
         title: 'Hani Roustom ─ Hospitality Executive',
         description:
             'Hospitality executive crafting destinations, luxury experiences, and thriving communities. CEO of Friday Harbour Resort.',
-        type: 'website'
+        type: 'website',
+        images: ['/images/friday-harbour-night.jpg']
     }
 };
 
