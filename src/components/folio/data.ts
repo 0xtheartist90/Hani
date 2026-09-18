@@ -23,25 +23,25 @@ export const JOURNEY_ITEMS = [
     {
         title: 'Friday Harbour Resort',
         meta: 'CEO · 2021 — Present',
-        image: '/images/friday-harbour-boardwalk.jpg',
+        image: '/images/friday-harbour.jpg',
         gradient: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 55%, #8fb0ba 100%)'
     },
     {
         title: 'The Hazelton Hotel',
         meta: 'General Manager · 2016 — 2021',
-        image: '/images/hazelton-yorkville.jpg',
+        image: '/images/hazelton.jpg',
         gradient: 'linear-gradient(135deg, #241f1a 0%, #4a3a2c 55%, #a68a64 100%)'
     },
     {
         title: 'Shangri-La Toronto',
         meta: 'Executive Team, F&B · 2013 — 2016',
-        image: '/images/shangri-la-toronto.jpg',
+        image: '/images/shangri-la.jpg',
         gradient: 'linear-gradient(135deg, #1f2420 0%, #3c4a3e 55%, #94a687 100%)'
     },
     {
         title: 'Four Seasons',
         meta: 'Washington, D.C. & Toronto · 2006 — 2013',
-        image: '/images/four-seasons-toronto.jpg',
+        image: '/images/four-seasons.jpg',
         gradient: 'linear-gradient(135deg, #26202b 0%, #4a3c52 55%, #a48fb0 100%)'
     }
 ];
@@ -65,7 +65,7 @@ export const SERVICES = [
         num: '03',
         title: 'Community Building',
         text: 'Programs and partnerships — from Be Our Guest to #HazeltonCares — with lasting local impact.',
-        image: '/images/community.jpg',
+        image: '/images/community-building.jpg',
         gradient: 'linear-gradient(160deg, #141f18 0%, #2c4a35 60%, #6da87f 100%)'
     },
     {
@@ -82,7 +82,7 @@ export const HERO_IMAGE = '/images/friday-harbour-night.jpg';
 export const PORTRAIT_IMAGE = '/images/hani-roustom.jpg';
 
 export const PHOTO_CREDITS =
-    'Photos: Friday Harbour Resort (courtesy) · Ramosc55, JK Liu (CC BY-SA 4.0) · Canmenwalker (CC BY 4.0) · Pexels';
+    'Photos: Friday Harbour Resort (courtesy) · Ramosc55 (CC BY-SA 4.0) · Pexels';
 
 export const EXPERIENCES = [
     { name: 'Cornell University', years: '2004 — 2006' },
