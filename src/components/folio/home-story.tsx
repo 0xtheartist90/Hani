@@ -545,11 +545,11 @@ const HomeStory = () => {
                             aria-label='Defining chapters'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
                                 <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
-                                <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(61.2*var(--scale))]'>
+                                <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(76*var(--scale))]'>
                                     <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Defining chapters
                                     </p>
-                                    <ul className='w-full text-[calc(4.1*var(--scale))] font-medium leading-[1.2] md:text-[length:var(--list-fs)]'>
+                                    <ul className='w-full text-[calc(3.4*var(--scale))] font-medium leading-[1.2] md:text-[calc(3.8*var(--scale))]'>
                                         {JOURNEY_ITEMS.map((item, i) => (
                                             <li
                                                 key={item.title}
@@ -560,14 +560,18 @@ const HomeStory = () => {
                                                     <span className='hidden w-10 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
                                                         0{i + 1}
                                                     </span>
-                                                    <span className='min-w-0 flex-1'>
+                                                    <span className='min-w-0 flex-1 whitespace-nowrap'>
                                                         {item.title}
-                                                        <span className='mt-1 block text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:hidden'>
+                                                        <span className='mt-1 block whitespace-normal text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:hidden'>
                                                             {item.meta}
                                                         </span>
                                                     </span>
-                                                    <span className='hidden shrink-0 text-sm font-normal uppercase tracking-wide text-[#2e2b28]/60 md:block'>
-                                                        {item.meta}
+                                                    <span className='hidden shrink-0 text-right text-xs font-normal uppercase leading-[1.5] tracking-wide text-[#2e2b28]/60 md:block'>
+                                                        {item.meta.split(' · ').map((part) => (
+                                                            <span key={part} className='block'>
+                                                                {part}
+                                                            </span>
+                                                        ))}
                                                     </span>
                                                     <ArrowUpRight className='hidden size-8 shrink-0 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 md:block md:size-14 md:-translate-x-2' />
                                                 </div>
@@ -748,49 +752,55 @@ const HomeStory = () => {
                                     ))}
                                 </div>
                             </div>
-                            <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-10 px-5 pb-5 pt-24 md:min-h-0 md:px-0 md:py-0'>
-                                <div className='flex flex-col gap-5 md:contents'>
-                                    <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:left-1/2 md:top-[var(--vg)] md:-translate-x-1/2 md:whitespace-nowrap md:text-center'>
-                                        Where journeys become destinations
+                            <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-12 px-5 pb-5 pt-24 md:min-h-0 md:px-0 md:py-0'>
+                                {/* centered composition: label / headline / email cta */}
+                                <div className='flex flex-col gap-6 md:absolute md:left-1/2 md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2 md:items-center md:gap-8'>
+                                    <p className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#ccc]/70 md:text-center'>
+                                        № 05 — Where journeys become destinations
                                     </p>
-                                    <div className='w-full leading-none md:absolute md:left-1/2 md:top-1/2 md:w-max md:max-w-none md:-translate-x-1/2 md:-translate-y-[62%]'>
-                                        <h2 className='font-display text-[calc(7*var(--scale))] uppercase leading-none tracking-[-0.04em] md:text-center md:text-[calc(16*var(--scale))]'>
-                                            <span className='block'>Next</span>
-                                            <span className='block italic'>chapter</span>
-                                        </h2>
-                                    </div>
+                                    <h2 className='font-display text-[calc(9*var(--scale))] uppercase leading-[0.92] tracking-[-0.04em] md:text-center md:text-[calc(15*var(--scale))] md:text-[#faf9f6]'>
+                                        <span className='block'>Next</span>
+                                        <span className='block italic'>chapter</span>
+                                    </h2>
+                                    <a
+                                        className='group mt-2 inline-flex w-fit items-center gap-4 border border-[#5a524d] px-6 py-4 text-lg font-medium leading-none transition-colors duration-300 hover:border-[#faf9f6] hover:bg-[#faf9f6] hover:text-[#1f1d1b] md:mt-4 md:px-8 md:py-5 md:text-[length:var(--cta-fs)]'
+                                        href={`mailto:${SITE.email}`}>
+                                        {SITE.email}
+                                        <ArrowForward className='size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1' />
+                                    </a>
                                 </div>
-                                <div className='flex flex-col gap-10 md:contents'>
-                                    <div className='flex flex-col gap-4 md:absolute md:bottom-[calc(var(--vg)_+_calc(10*var(--scale)))] md:left-1/2 md:-translate-x-1/2 md:items-center'>
-                                        <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
-                                            Contact to
-                                        </p>
-                                        <a
-                                            className='link-underline-filled w-fit text-2xl font-medium leading-[1.2] md:text-[length:var(--display-fs)]'
-                                            href={`mailto:${SITE.email}`}>
-                                            {SITE.email}
-                                        </a>
-                                    </div>
-                                    <div className='flex flex-col gap-5 md:contents'>
-                                        <p className='text-[calc(1.1*var(--scale))] font-medium uppercase leading-[1.4] md:hidden'>
-                                            social
-                                        </p>
-                                        <nav
-                                            className='flex flex-col gap-1 text-2xl font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-24 md:flex-row md:gap-6 md:text-base'
-                                            aria-label='Social'>
-                                            <a
-                                                className='link-underline w-fit'
-                                                href={SITE.linkedin}
-                                                target='_blank'
-                                                rel='noreferrer'>
-                                                LinkedIn
-                                            </a>
-                                        </nav>
-                                    </div>
-                                    <p className='hidden text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40 md:absolute md:bottom-[var(--vg)] md:left-32 md:block md:max-w-[calc(30*var(--scale))]'>
+                                {/* balanced bottom line: credits / copyright / social */}
+                                <div className='hidden md:absolute md:inset-x-0 md:bottom-8 md:flex md:items-end md:justify-between md:pl-32 md:pr-24'>
+                                    <p className='max-w-[calc(30*var(--scale))] text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40'>
                                         {PHOTO_CREDITS}
                                     </p>
-                                    <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4] md:hidden'>
+                                    <p className='text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] text-[#ccc]/70'>
+                                        © 2026 — Hani Roustom · Folio Edition
+                                    </p>
+                                    <nav className='text-base font-medium leading-[1.2]' aria-label='Social'>
+                                        <a
+                                            className='link-underline w-fit'
+                                            href={SITE.linkedin}
+                                            target='_blank'
+                                            rel='noreferrer'>
+                                            LinkedIn
+                                        </a>
+                                    </nav>
+                                </div>
+                                {/* mobile bottom block */}
+                                <div className='flex flex-col gap-5 md:hidden'>
+                                    <nav
+                                        className='flex flex-col gap-1 text-2xl font-medium leading-[1.2]'
+                                        aria-label='Social'>
+                                        <a
+                                            className='link-underline w-fit'
+                                            href={SITE.linkedin}
+                                            target='_blank'
+                                            rel='noreferrer'>
+                                            LinkedIn
+                                        </a>
+                                    </nav>
+                                    <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         <div className='flex items-start justify-between'>
                                             <p>© 2026 — hani roustom</p>
                                             <p>folio — edition</p>

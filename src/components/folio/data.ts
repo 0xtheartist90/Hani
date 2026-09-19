@@ -40,7 +40,7 @@ export const JOURNEY_ITEMS = [
     },
     {
         title: 'Four Seasons',
-        meta: 'Washington, D.C. & Toronto · 2006 — 2013',
+        meta: 'Washington & Toronto · 2006 — 2013',
         image: '/images/four-seasons.jpg',
         gradient: 'linear-gradient(135deg, #26202b 0%, #4a3c52 55%, #a48fb0 100%)'
     }
