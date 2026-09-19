@@ -415,7 +415,7 @@ const HomeStory = () => {
                                     ref={yearRowRef}
                                     className='font-display tabular-nums opacity-0'
                                     aria-hidden='true'>
-                                    <div className='flex h-[1em] w-max text-[calc(6*var(--scale))] leading-none md:text-[calc(10.5*var(--scale))]'>
+                                    <div className='flex h-[1em] w-max text-[calc(5.2*var(--scale))] leading-none md:text-[calc(10.5*var(--scale))]'>
                                         <span className='block h-[1em] overflow-hidden'>
                                             <div ref={yearStripRef} className='will-change-transform'>
                                                 {CITIES.map((city) => (
@@ -432,7 +432,7 @@ const HomeStory = () => {
                             <div className='absolute inset-x-5 bottom-8 z-[1] md:inset-x-auto md:bottom-auto md:left-32 md:top-[var(--vg)]'>
                                 <h1
                                     data-name-heading
-                                    className='font-display text-[calc(10.5*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(16*var(--scale))]'>
+                                    className='font-display text-[calc(6.6*var(--scale))] uppercase leading-[0.92] tracking-[-0.04em] opacity-0 md:text-[calc(16*var(--scale))]'>
                                     {SITE.name.map((word, wi) => (
                                         <span
                                             key={word}
@@ -473,7 +473,7 @@ const HomeStory = () => {
                             </p>
                             <p
                                 data-hero-fade
-                                className='absolute bottom-12 right-5 z-[1] text-right font-display text-xl font-normal uppercase leading-none opacity-0 md:bottom-[var(--vg)] md:right-24 md:text-[length:var(--display-fs)]'>
+                                className='absolute bottom-12 right-5 z-[1] hidden text-right font-display text-xl font-normal uppercase leading-none opacity-0 md:bottom-[var(--vg)] md:right-24 md:block md:text-[length:var(--display-fs)]'>
                                 ( Scroll )
                             </p>
                         </section>
@@ -637,7 +637,7 @@ const HomeStory = () => {
                                     Two decades, four houses
                                 </p>
                                 {/* timeline */}
-                                <div className='relative flex flex-col gap-12 md:absolute md:left-32 md:right-24 md:top-1/2 md:h-[calc(58*var(--scale))] md:-translate-y-1/2 md:flex-row md:items-stretch md:gap-0'>
+                                <div className='relative flex flex-col gap-12 md:absolute md:left-32 md:right-24 md:top-1/2 md:h-[min(calc(64*var(--scale)),calc(100dvh_-_15rem))] md:-translate-y-1/2 md:flex-row md:items-stretch md:gap-0'>
                                     <span
                                         data-anim-line
                                         className='absolute left-1 top-0 h-full w-px origin-top bg-[#1e2a30]/25 md:left-0 md:top-1/2 md:h-px md:w-full md:origin-left'
@@ -652,10 +652,10 @@ const HomeStory = () => {
                                             <div
                                                 className={`flex flex-col gap-2.5 md:absolute md:inset-x-3 ${
                                                     i % 2 === 1
-                                                        ? 'md:top-[calc(50%_+_1.25rem)]'
-                                                        : 'md:bottom-[calc(50%_+_1.25rem)] md:flex-col-reverse'
+                                                        ? 'md:top-[calc(50%_+_1rem)]'
+                                                        : 'md:bottom-[calc(50%_+_1rem)] md:flex-col-reverse'
                                                 }`}>
-                                                <div data-anim-rise className='w-full overflow-hidden' style={{ aspectRatio: '16 / 9' }}>
+                                                <div data-anim-rise className='w-full overflow-hidden' style={{ aspectRatio: '21 / 10' }}>
                                                     {item.image ? (
                                                         // eslint-disable-next-line @next/next/no-img-element
                                                         <img
