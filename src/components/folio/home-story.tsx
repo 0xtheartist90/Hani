@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ABOUT, AWARDS, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, PORTRAIT_IMAGE, ROLES, SERVICES, SITE } from '@/components/folio/data';
+import { ABOUT, AWARDS, EXPERIENCES, FOOTER_NOTE, HERO_IMAGE, JOURNEY_ITEMS, PORTRAIT_IMAGE, ROLES, SERVICES, SITE } from '@/components/folio/data';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -924,8 +924,8 @@ const HomeStory = () => {
                                 </div>
                                 {/* balanced bottom line: credits / copyright / social */}
                                 <div className='hidden md:absolute md:inset-x-0 md:bottom-8 md:flex md:items-end md:justify-between md:pl-32 md:pr-24'>
-                                    <p className='max-w-[calc(30*var(--scale))] text-[calc(1*var(--scale))] uppercase leading-[1.4] text-[#ccc]/40'>
-                                        {PHOTO_CREDITS}
+                                    <p className='max-w-[calc(30*var(--scale))] text-[calc(1.1*var(--scale))] uppercase leading-[1.4] tracking-[0.1em] text-[#ccc]/60'>
+                                        {FOOTER_NOTE}
                                     </p>
                                     <p className='text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] text-[#ccc]/70'>
                                         © 2026 — Hani Roustom
@@ -958,7 +958,7 @@ const HomeStory = () => {
                                             <p>© 2026 — hani roustom</p>
                                             <p>creating destinations</p>
                                         </div>
-                                        <p className='text-[#ccc]/40'>{PHOTO_CREDITS}</p>
+                                        <p className='text-[#ccc]/60'>{FOOTER_NOTE}</p>
                                     </div>
                                 </div>
                             </div>

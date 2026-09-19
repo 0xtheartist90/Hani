@@ -52,7 +52,7 @@ export const SERVICES = [
         num: '01',
         title: 'Destination Development',
         text: 'Shaping resorts and communities into all-season destinations people return to.',
-        image: '/images/friday-harbour-nest.jpg',
+        image: '/images/friday-harbour-clubhouse.jpg',
         gradient: 'linear-gradient(160deg, #14202a 0%, #2d4a5c 60%, #6d95a8 100%)'
     },
     {
@@ -82,8 +82,7 @@ export const HERO_IMAGE = '/images/friday-harbour-night.jpg';
 
 export const PORTRAIT_IMAGE = '/images/hani-roustom.jpg';
 
-export const PHOTO_CREDITS =
-    'Photos: Friday Harbour Resort (courtesy) · Ramosc55 (CC BY-SA 4.0) · Pexels';
+export const FOOTER_NOTE = 'Innisfil, Ontario — On the shores of Lake Simcoe';
 
 export const AWARDS = [
     { title: 'Hotelier of the Year', org: 'Dine Magazine', year: '2018' },
