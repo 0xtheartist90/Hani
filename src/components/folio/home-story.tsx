@@ -568,14 +568,14 @@ const HomeStory = () => {
                                     className='h-dvh w-screen overflow-hidden will-change-transform'
                                     style={{
                                         transformOrigin: '50% 50%',
-                                        background: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 60%, #8fb0ba 100%)'
+                                        background: '#1f1d1b'
                                     }}>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={HERO_IMAGE}
                                         alt=''
                                         className='size-full object-cover object-center'
-                                        loading='lazy'
+                                        loading='eager'
                                     />
                                 </div>
                             </div>
@@ -589,14 +589,14 @@ const HomeStory = () => {
                                     className='pointer-events-none absolute left-1/2 top-1/2 z-10 h-[calc(15.2*var(--scale))] w-[calc(8.5*var(--scale))] -translate-x-1/2 -translate-y-1/2 overflow-hidden md:hidden'
                                     aria-hidden='true'
                                     style={{
-                                        background: 'linear-gradient(135deg, #1c2b33 0%, #3d5a66 60%, #8fb0ba 100%)'
+                                        background: '#1f1d1b'
                                     }}>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={HERO_IMAGE}
                                         alt=''
                                         className='size-full object-cover object-center'
-                                        loading='lazy'
+                                        loading='eager'
                                     />
                                 </div>
                                 <p
@@ -685,7 +685,7 @@ const HomeStory = () => {
                                             key={item.title}
                                             className='pointer-events-none absolute inset-0 flex origin-center items-end overflow-hidden p-5 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)]'
                                             style={{
-                                                background: item.gradient,
+                                                background: '#d8d1c8',
                                                 opacity: hoveredWork === i ? 1 : 0,
                                                 transform: hoveredWork === i ? 'scale(1)' : 'scale(0.85)'
                                             }}>
@@ -695,7 +695,7 @@ const HomeStory = () => {
                                                     src={item.image}
                                                     alt=''
                                                     className='absolute inset-0 size-full object-cover object-center'
-                                                    loading='lazy'
+                                                    loading='eager'
                                                 />
                                             ) : null}
                                             <span className='relative z-[1] font-display text-2xl uppercase leading-none text-[#faf9f6]/90 [text-shadow:0_1px_12px_rgba(0,0,0,.45)]'>
@@ -741,14 +741,14 @@ const HomeStory = () => {
                                             className={`absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] group-hover:[clip-path:inset(0%_0%_0%)] ${si % 2 === 1 ? '[clip-path:inset(0%_0%_100%)]' : '[clip-path:inset(100%_0%_0%)]'}`}
                                             aria-hidden='true'>
                                             <div className='absolute inset-0 z-[1] bg-[#1f1d1b]/60' />
-                                            <div className='size-full' style={{ background: service.gradient }}>
+                                            <div className='size-full bg-[#1f1d1b]'>
                                                 {service.image ? (
                                                     // eslint-disable-next-line @next/next/no-img-element
                                                     <img
                                                         src={service.image}
                                                         alt=''
                                                         className='size-full object-cover object-center'
-                                                        loading='lazy'
+                                                        loading='eager'
                                                     />
                                                 ) : null}
                                             </div>
