@@ -739,9 +739,9 @@ const HomeStory = () => {
                             <div
                                 className='pointer-events-none absolute inset-x-0 top-14 z-[2] overflow-hidden border-y border-[#3a3632] py-3 md:top-0'
                                 aria-hidden='true'>
-                                <div className='marquee-track flex w-max gap-12 whitespace-nowrap text-[calc(1.1*var(--scale))] uppercase tracking-[0.18em] text-[#ccc]/50'>
+                                <div className='marquee-track flex w-max whitespace-nowrap text-[calc(1.1*var(--scale))] uppercase tracking-[0.18em] text-[#ccc]/50 will-change-transform'>
                                     {Array.from({ length: 2 }).map((_, mi) => (
-                                        <span key={mi} className='flex gap-12'>
+                                        <span key={mi} className='flex gap-12 pr-12'>
                                             <span>Hospitality is an act of love</span>
                                             <span>✳</span>
                                             <span>Success follows excellence</span>
