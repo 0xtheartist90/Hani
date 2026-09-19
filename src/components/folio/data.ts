@@ -15,7 +15,8 @@ export const ABOUT = {
     label: 'Quick intro',
     intro: 'Hi, I’m Hani — a hospitality executive with 25+ years across luxury hotels, resorts and destinations, from Four Seasons and Shangri-La to The Hazelton and Friday Harbour.',
     quote: ['“Hospitality is,', 'at its heart,', 'an act of love.”'],
-    beyond: 'Beyond hospitality: travel, design, fashion, and culture.',
+    beyond: 'Lebanon → Cyprus → United States → Canada',
+    beyondSub: 'Beyond hospitality: travel, design, fashion, and culture.',
     cta: 'More about me'
 };
 
@@ -84,7 +85,24 @@ export const PORTRAIT_IMAGE = '/images/hani-roustom.jpg';
 export const PHOTO_CREDITS =
     'Photos: Friday Harbour Resort (courtesy) · Ramosc55 (CC BY-SA 4.0) · Pexels';
 
+export const AWARDS = [
+    { title: 'Hotelier of the Year', org: 'Dine Magazine', year: '2018' },
+    { title: 'Honorary BBA, Hospitality', org: 'George Brown College', year: '2021' },
+    { title: 'Industry Partner Recognition', org: 'George Brown College', year: '2018' },
+    { title: 'Rama Scholarship', org: 'Cornell University', year: '2006' }
+];
+
+export const ROLES = [
+    'Editorial Advisory Board — Hotelier Magazine',
+    'President — Cornell Hotel Society, Toronto',
+    'Founder — Be Our Guest co-op program',
+    'Program Advisory — George Brown College',
+    'Standards Committee — Forbes Travel Guide',
+    'Board — Greater Toronto Hotel Association'
+];
+
 export const EXPERIENCES = [
+    { name: 'Bournemouth University', years: '1998' },
     { name: 'Cornell University', years: '2004 — 2006' },
     { name: 'Four Seasons', years: '2006 — 2013' },
     { name: 'Shangri-La', years: '2013 — 2016' },

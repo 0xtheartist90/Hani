@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ABOUT, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, PORTRAIT_IMAGE, SERVICES, SITE } from '@/components/folio/data';
+import { ABOUT, AWARDS, EXPERIENCES, HERO_IMAGE, JOURNEY_ITEMS, PHOTO_CREDITS, PORTRAIT_IMAGE, ROLES, SERVICES, SITE } from '@/components/folio/data';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -111,6 +111,54 @@ const HomeStory = () => {
                 3.3
             );
 
+        /* section reveals: rise / wipe / word-mask, fired once per unit */
+        const trackRect0 = track.getBoundingClientRect();
+        const units = [
+            ...gsap.utils.toArray<HTMLElement>('[data-panel]:not([data-panel-id="home"]):not([data-panel-id="services"])', track),
+            ...gsap.utils.toArray<HTMLElement>('[data-panel-id="services"] [data-reveal-unit]', track)
+        ];
+        const reveals = units
+            .map((unit) => {
+                const rise = unit.querySelectorAll('[data-anim-rise]');
+                const wipes = unit.querySelectorAll('[data-anim-wipe]');
+                const words = unit.querySelectorAll('[data-anim-word]');
+                if (!rise.length && !wipes.length && !words.length) return null;
+                const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+                if (words.length) {
+                    gsap.set(words, { yPercent: 115 });
+                    tl.to(words, { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.12 }, 0);
+                }
+                if (wipes.length) {
+                    const imgs = Array.from(wipes)
+                        .map((w) => w.querySelector('img'))
+                        .filter(Boolean);
+                    gsap.set(wipes, { clipPath: 'inset(0% 0% 100% 0%)' });
+                    gsap.set(imgs, { scale: 1.12 });
+                    tl.to(wipes, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'power4.out' }, 0.1);
+                    tl.to(imgs, { scale: 1, duration: 1.5 }, 0.1);
+                }
+                if (rise.length) {
+                    gsap.set(rise, { y: 36, opacity: 0 });
+                    tl.to(rise, { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.12);
+                }
+                const left = unit.getBoundingClientRect().left - trackRect0.left;
+
+                return { tl, left, unit, played: false };
+            })
+            .filter(
+                (r): r is { tl: gsap.core.Timeline; left: number; unit: HTMLElement; played: boolean } => r !== null
+            );
+
+        const fireReveals = (x: number) => {
+            const edge = x + window.innerWidth * 0.82;
+            for (const r of reveals) {
+                if (!r.played && r.left <= edge) {
+                    r.played = true;
+                    r.tl.play();
+                }
+            }
+        };
+
         const mm = gsap.matchMedia();
         let masterST: ScrollTrigger | undefined;
         let holdDur = 0;
@@ -139,6 +187,7 @@ const HomeStory = () => {
                     onUpdate: (self) => {
                         setProgress(self.progress);
                         const x = -(gsap.getProperty(track, 'x') as number);
+                        fireReveals(x);
                         const probe = x + window.innerWidth * 0.5;
                         let active = panels[0];
                         for (const p of panels) if (p.offsetLeft <= probe) active = p;
@@ -196,6 +245,21 @@ const HomeStory = () => {
                 })
             );
 
+            reveals.forEach((r) => {
+                triggers.push(
+                    ScrollTrigger.create({
+                        trigger: r.unit,
+                        start: 'top 78%',
+                        onEnter: () => {
+                            if (!r.played) {
+                                r.played = true;
+                                r.tl.play();
+                            }
+                        }
+                    })
+                );
+            });
+
             navigateRef.current = (id: string) => {
                 const target = sections.find((p) => p.dataset.panelId === id);
                 if (target) lenis.scrollTo(target, { duration: 1.4 });
@@ -209,6 +273,7 @@ const HomeStory = () => {
 
         return () => {
             intro.kill();
+            reveals.forEach((r) => r.tl.kill());
             mm.revert();
             gsap.ticker.remove(raf);
             lenis.destroy();
@@ -269,7 +334,7 @@ const HomeStory = () => {
                 </button>
                 <div className='hidden flex-1 flex-col items-center justify-between py-8 md:flex'>
                     <p className='vt-rl vt-reading-up text-[calc(1.1*var(--scale))] uppercase tracking-wide'>
-                        Folio — Edition
+                        Creating Destinations
                     </p>
                     <button
                         type='button'
@@ -434,12 +499,15 @@ const HomeStory = () => {
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
                                 <p className={chapterHeading}>№ 01 — The Person</p>
                                 <div className='flex w-full flex-col gap-5 md:absolute md:right-24 md:top-[var(--vg)] md:z-10 md:w-[calc(58*var(--scale))]'>
-                                    <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.2]'>{ABOUT.label}</p>
-                                    <p className='text-2xl font-medium leading-[1.3] md:text-[length:var(--display-fs)]'>
+                                    <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.2]'>
+                                        {ABOUT.label}
+                                    </p>
+                                    <p data-anim-rise className='text-2xl font-medium leading-[1.3] md:text-[length:var(--display-fs)]'>
                                         {ABOUT.intro}
                                     </p>
                                 </div>
                                 <a
+                                    data-anim-rise
                                     className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-24 md:z-10 md:text-[length:var(--cta-fs)]'
                                     href={SITE.linkedin}
                                     target='_blank'
@@ -454,7 +522,7 @@ const HomeStory = () => {
                                         className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#b8b3ac] md:block'
                                         aria-hidden='true'
                                     />
-                                    <div className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:aspect-auto md:size-full'>
+                                    <div data-anim-wipe className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:aspect-auto md:size-full'>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={PORTRAIT_IMAGE}
@@ -464,7 +532,7 @@ const HomeStory = () => {
                                         />
                                     </div>
                                     </div>
-                                    <blockquote className='w-full border-0 p-0 text-[calc(1.1*var(--scale))] font-normal uppercase not-italic leading-[1.4] md:absolute md:left-[calc(8rem_+_var(--portrait-w)_+_calc(4*var(--scale)))] md:top-[var(--portrait-top)] md:z-10 md:w-[calc(16*var(--scale))]'>
+                                    <blockquote data-anim-rise className='w-full border-0 p-0 text-[calc(1.1*var(--scale))] font-normal uppercase not-italic leading-[1.4] md:absolute md:left-[calc(8rem_+_var(--portrait-w)_+_calc(4*var(--scale)))] md:top-[var(--portrait-top)] md:z-10 md:w-[calc(16*var(--scale))]'>
                                         {ABOUT.quote.map((line) => (
                                             <span key={line} className='block'>
                                                 {line}
@@ -472,8 +540,11 @@ const HomeStory = () => {
                                         ))}
                                     </blockquote>
                                 </div>
-                                <p className='hidden text-base font-normal leading-[1.4] md:absolute md:bottom-[calc(var(--vg)_+_calc(8*var(--scale)))] md:right-24 md:block md:max-w-[calc(29.4*var(--scale))] md:text-right'>
-                                    {ABOUT.beyond}
+                                <p
+                                    data-anim-rise
+                                    className='hidden text-base font-normal leading-[1.5] md:absolute md:bottom-[calc(var(--vg)_+_calc(8*var(--scale)))] md:right-24 md:block md:max-w-[calc(32*var(--scale))] md:text-right'>
+                                    <span className='block tracking-[0.06em]'>{ABOUT.beyond}</span>
+                                    <span className='block text-[#2e2b28]/60'>{ABOUT.beyondSub}</span>
                                 </p>
                             </div>
                         </section>
@@ -546,13 +617,14 @@ const HomeStory = () => {
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
                                 <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
                                 <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(76*var(--scale))]'>
-                                    <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
+                                    <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Defining chapters
                                     </p>
                                     <ul className='w-full text-[calc(3.4*var(--scale))] font-medium leading-[1.2] md:text-[calc(3.8*var(--scale))]'>
                                         {JOURNEY_ITEMS.map((item, i) => (
                                             <li
                                                 key={item.title}
+                                                data-anim-rise
                                                 className='group relative border-b border-[#b8b3ac] last:border-b-0'
                                                 onMouseEnter={() => setHoveredWork(i)}
                                                 onMouseLeave={() => setHoveredWork(null)}>
@@ -584,6 +656,7 @@ const HomeStory = () => {
                                     </ul>
                                 </div>
                                 <a
+                                    data-anim-rise
                                     className='link-underline inline-flex w-fit items-center gap-2 text-lg font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:left-32 md:text-[length:var(--cta-fs)]'
                                     href={SITE.linkedin}
                                     target='_blank'
@@ -591,7 +664,9 @@ const HomeStory = () => {
                                     View full journey
                                     <ArrowForward className='size-5 shrink-0 md:size-6' />
                                 </a>
-                                <p className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] text-[#1a1a1a] md:absolute md:bottom-[calc(var(--vg)_+_calc(3.4*var(--scale)))] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
+                                <p
+                                    data-anim-rise
+                                    className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] text-[#1a1a1a] md:absolute md:bottom-[calc(var(--vg)_+_calc(3.4*var(--scale)))] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
                                     ❋ Highlights from 25+ years in luxury hospitality
                                 </p>
                                 {/* hover preview */}
@@ -639,15 +714,17 @@ const HomeStory = () => {
                             className='relative z-[1] flex w-screen shrink-0 flex-col overflow-hidden bg-[#2e2b28] pt-14 text-[#faf9f6] md:h-dvh md:w-max md:pl-16 md:pt-0'
                             aria-label='What I do'>
                             <div className='flex w-full flex-col md:min-h-0 md:w-max md:flex-1 md:flex-row md:items-stretch md:pl-16'>
-                                <div className='mb-12 flex flex-col gap-10 px-5 md:mb-0 md:w-[calc(63.6*var(--scale))] md:min-h-0 md:shrink-0 md:justify-between md:gap-0 md:px-0 md:py-[var(--vg)] md:pr-6'>
+                                <div
+                                    data-reveal-unit
+                                    className='mb-12 flex flex-col gap-10 px-5 md:mb-0 md:w-[calc(63.6*var(--scale))] md:min-h-0 md:shrink-0 md:justify-between md:gap-0 md:px-0 md:py-[var(--vg)] md:pr-6'>
                                     <p className='font-display text-lg font-normal uppercase leading-none md:text-2xl'>
                                         № 03 — The Craft
                                     </p>
                                     <div className='flex flex-col gap-5'>
-                                        <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.2]'>
+                                        <p data-anim-rise className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.2]'>
                                             What I do?
                                         </p>
-                                        <p className='text-2xl font-normal leading-[1.3] md:text-[length:var(--display-fs)]'>
+                                        <p data-anim-rise className='text-2xl font-normal leading-[1.3] md:text-[length:var(--display-fs)]'>
                                             Building destinations with clarity, care, and intention.
                                         </p>
                                     </div>
@@ -655,6 +732,7 @@ const HomeStory = () => {
                                 {SERVICES.map((service, si) => (
                                     <article
                                         key={service.num}
+                                        data-reveal-unit
                                         className={`group relative flex h-[70dvh] w-full flex-col justify-between gap-10 overflow-hidden border-t border-[#5f5a54] px-5 py-8 first-of-type:border-t md:h-full md:w-[calc(40*var(--scale))] md:shrink-0 md:gap-0 md:border-l md:border-t-0 md:p-[var(--vg)] ${si % 2 === 1 ? 'md:flex-col-reverse' : ''}`}>
                                         <div
                                             className={`absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] group-hover:[clip-path:inset(0%_0%_0%)] ${si % 2 === 1 ? '[clip-path:inset(0%_0%_100%)]' : '[clip-path:inset(100%_0%_0%)]'}`}
@@ -673,14 +751,17 @@ const HomeStory = () => {
                                             </div>
                                         </div>
                                         <p
+                                            data-anim-rise
                                             className='font-display text-[calc(7*var(--scale))] leading-none text-transparent md:text-[calc(11*var(--scale))] md:leading-[1.1] md:tracking-[-0.024em]'
                                             style={{ WebkitTextStroke: '1px #faf9f6' }}>
                                             {service.num}
                                         </p>
-                                        <p className='font-display text-[calc(3.2*var(--scale))] font-normal uppercase leading-[1.3] md:text-[length:var(--display-fs)] md:leading-[1.2]'>
+                                        <p data-anim-rise className='font-display text-[calc(3.2*var(--scale))] font-normal uppercase leading-[1.3] md:text-[length:var(--display-fs)] md:leading-[1.2]'>
                                             {service.title}
                                         </p>
-                                        <p className='text-sm leading-[1.3] md:text-base'>{service.text}</p>
+                                        <p data-anim-rise className='text-sm leading-[1.3] md:text-base'>
+                                            {service.text}
+                                        </p>
                                     </article>
                                 ))}
                             </div>
@@ -696,29 +777,73 @@ const HomeStory = () => {
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
                             aria-label='Selected experiences'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-10 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Company</p>
-                                <div className='w-full md:absolute md:left-32 md:top-[var(--vg)] md:max-w-[calc(68*var(--scale))]'>
-                                    <p className='mb-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
+                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Record</p>
+                                <div className='w-full md:absolute md:left-32 md:top-[var(--vg)] md:max-w-[calc(48*var(--scale))]'>
+                                    <p data-anim-rise className='mb-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Selected experiences
                                     </p>
-                                    <ul className='flex min-w-0 flex-col text-[calc(4.2*var(--scale))] font-medium leading-[1.2] md:text-[length:var(--list-fs)]'>
+                                    <ul className='flex min-w-0 flex-col text-[calc(3.2*var(--scale))] font-medium leading-[1.2] md:text-[calc(2.8*var(--scale))]'>
                                         {EXPERIENCES.map((exp, ei) => (
                                             <li
                                                 key={exp.name}
-                                                className='flex cursor-default items-baseline gap-6 border-t border-[#b8b3ac] py-3 opacity-90 transition-[opacity,padding] duration-300 ease-out first:border-t-0 hover:pl-3 hover:opacity-100'>
-                                                <span className='hidden w-10 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
+                                                data-anim-rise
+                                                className='flex cursor-default items-baseline gap-6 border-t border-[#b8b3ac] py-3.5 opacity-90 transition-[opacity,padding] duration-300 ease-out first:border-t-0 hover:pl-3 hover:opacity-100'>
+                                                <span className='hidden w-8 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
                                                     0{ei + 1}
                                                 </span>
-                                                <span className='min-w-0 flex-1'>{exp.name}</span>
-                                                <span className='shrink-0 text-sm font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-base'>
+                                                <span className='min-w-0 flex-1 whitespace-nowrap'>{exp.name}</span>
+                                                <span className='shrink-0 text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-sm'>
                                                     {exp.years}
                                                 </span>
                                             </li>
                                         ))}
-                                        <li className='border-t border-[#b8b3ac] py-3 opacity-50'>And more</li>
                                     </ul>
                                 </div>
-                                <p className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:bottom-[var(--vg)] md:right-24 md:max-w-[calc(29.4*var(--scale))] md:text-right'>
+                                <div className='flex w-full flex-col gap-10 md:absolute md:right-24 md:top-[calc(var(--vg)_+_calc(5*var(--scale)))] md:w-[calc(34*var(--scale))]'>
+                                    <div>
+                                        <p data-anim-rise className='mb-4 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
+                                            Recognition
+                                        </p>
+                                        <ul className='flex flex-col'>
+                                            {AWARDS.map((award) => (
+                                                <li
+                                                    key={award.title}
+                                                    data-anim-rise
+                                                    className='flex items-baseline justify-between gap-4 border-t border-[#b8b3ac] py-2.5 first:border-t-0'>
+                                                    <span className='min-w-0'>
+                                                        <span className='block text-base font-medium leading-[1.3]'>
+                                                            {award.title}
+                                                        </span>
+                                                        <span className='block text-xs uppercase tracking-wide text-[#2e2b28]/60'>
+                                                            {award.org}
+                                                        </span>
+                                                    </span>
+                                                    <span className='shrink-0 font-display text-base text-[#2e2b28]/60'>
+                                                        {award.year}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <p data-anim-rise className='mb-4 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
+                                            Industry leadership
+                                        </p>
+                                        <ul className='flex flex-col gap-1.5'>
+                                            {ROLES.map((role) => (
+                                                <li
+                                                    key={role}
+                                                    data-anim-rise
+                                                    className='text-xs uppercase leading-[1.5] tracking-wide text-[#2e2b28]/75'>
+                                                    {role}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p
+                                    data-anim-rise
+                                    className='text-[calc(1.1*var(--scale))] font-normal uppercase leading-[1.4] md:absolute md:bottom-[var(--vg)] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
                                     A career spanning hotels, resorts,
                                     <br />
                                     and destinations.
@@ -755,14 +880,21 @@ const HomeStory = () => {
                             <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-12 px-5 pb-5 pt-24 md:min-h-0 md:px-0 md:py-0'>
                                 {/* centered composition: label / headline / email cta */}
                                 <div className='flex flex-col gap-6 md:absolute md:left-1/2 md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2 md:items-center md:gap-8'>
-                                    <p className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#ccc]/70 md:text-center'>
+                                    <p
+                                        data-anim-rise
+                                        className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#ccc]/70 md:text-center'>
                                         № 05 — Where journeys become destinations
                                     </p>
                                     <h2 className='font-display text-[calc(9*var(--scale))] uppercase leading-[0.92] tracking-[-0.04em] md:text-center md:text-[calc(15*var(--scale))] md:text-[#faf9f6]'>
-                                        <span className='block'>Next</span>
-                                        <span className='block italic'>chapter</span>
+                                        <span className='block overflow-hidden pb-[0.08em] -mb-[0.08em]'>
+                                            <span data-anim-word className='block'>Next</span>
+                                        </span>
+                                        <span className='block overflow-hidden pb-[0.08em] -mb-[0.08em]'>
+                                            <span data-anim-word className='block italic'>chapter</span>
+                                        </span>
                                     </h2>
                                     <a
+                                        data-anim-rise
                                         className='group mt-2 inline-flex w-fit items-center gap-4 border border-[#5a524d] px-6 py-4 text-lg font-medium leading-none transition-colors duration-300 hover:border-[#faf9f6] hover:bg-[#faf9f6] hover:text-[#1f1d1b] md:mt-4 md:px-8 md:py-5 md:text-[length:var(--cta-fs)]'
                                         href={`mailto:${SITE.email}`}>
                                         {SITE.email}
@@ -775,7 +907,7 @@ const HomeStory = () => {
                                         {PHOTO_CREDITS}
                                     </p>
                                     <p className='text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] text-[#ccc]/70'>
-                                        © 2026 — Hani Roustom · Folio Edition
+                                        © 2026 — Hani Roustom
                                     </p>
                                     <nav className='text-base font-medium leading-[1.2]' aria-label='Social'>
                                         <a
@@ -803,7 +935,7 @@ const HomeStory = () => {
                                     <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         <div className='flex items-start justify-between'>
                                             <p>© 2026 — hani roustom</p>
-                                            <p>folio — edition</p>
+                                            <p>creating destinations</p>
                                         </div>
                                         <p className='text-[#ccc]/40'>{PHOTO_CREDITS}</p>
                                     </div>
