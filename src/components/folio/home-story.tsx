@@ -363,18 +363,20 @@ const HomeStory = () => {
                     Close
                 </button>
                 <div className='flex min-h-0 flex-1 flex-col justify-between px-5 pb-6 pt-24 md:px-32 md:pb-[var(--vg)] md:pt-[var(--vg)] md:justify-center md:gap-[3.6vh]'>
-                    <nav className='flex flex-col gap-6 md:items-end xl:gap-[3.6vh]' aria-label='Primary'>
+                    <nav className='flex flex-col gap-5 md:items-end md:gap-[2.2vh]' aria-label='Primary'>
                         {[
-                            { n: '01.', label: 'Home', id: 'home' },
-                            { n: '02.', label: 'About', id: 'about' },
-                            { n: '03.', label: 'Journey', id: 'work' },
-                            { n: '04.', label: 'Contact', id: 'contact' }
+                            { n: '', label: 'Home', id: 'home' },
+                            { n: '01.', label: 'The Person', id: 'about' },
+                            { n: '02.', label: 'The Journey', id: 'work' },
+                            { n: '03.', label: 'The Craft', id: 'services' },
+                            { n: '04.', label: 'The Record', id: 'clients' },
+                            { n: '05.', label: 'Contact', id: 'contact' }
                         ].map((item) => (
                             <button
                                 key={item.id}
                                 type='button'
                                 onClick={() => openNav(item.id)}
-                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(6.8*var(--scale))] text-[#faf9f6] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:flex-row-reverse md:text-right md:text-[min(18vh,12vw)] xl:gap-6'>
+                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(5.2*var(--scale))] text-[#faf9f6] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:flex-row-reverse md:text-right md:text-[min(11vh,8vw)] xl:gap-6'>
                                 <span className='w-6 shrink-0 font-display text-[0.3em] font-normal leading-[1.2] md:w-auto'>
                                     {item.n}
                                 </span>
