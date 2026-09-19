@@ -14,7 +14,7 @@ export const SITE = {
 export const ABOUT = {
     label: 'Quick intro',
     intro: 'Hi, I’m Hani — a hospitality executive with 25+ years across luxury hotels, resorts and destinations, from Four Seasons and Shangri-La to The Hazelton and Friday Harbour.',
-    quote: ['“Hospitality is,', 'at its heart,', 'an act of love.”'],
+    quote: ['“Success follows', 'excellence — not', 'the other way', 'around.”'],
     beyond: 'Lebanon → Cyprus → United States → Canada',
     beyondSub: 'Beyond hospitality: travel, design, fashion, and culture.',
     cta: 'More about me'
@@ -23,21 +23,25 @@ export const ABOUT = {
 export const JOURNEY_ITEMS = [
     {
         title: 'Friday Harbour Resort',
+        year: '2021',
         meta: 'CEO · 2021 — Present',
         image: '/images/friday-harbour.jpg'
     },
     {
         title: 'The Hazelton Hotel',
+        year: '2016',
         meta: 'General Manager · 2016 — 2021',
         image: '/images/hazelton.jpg'
     },
     {
         title: 'Shangri-La Toronto',
+        year: '2013',
         meta: 'Executive Team, F&B · 2013 — 2016',
         image: '/images/shangri-la.jpg'
     },
     {
         title: 'Four Seasons',
+        year: '2006',
         meta: 'Washington & Toronto · 2006 — 2013',
         image: '/images/four-seasons.jpg'
     }

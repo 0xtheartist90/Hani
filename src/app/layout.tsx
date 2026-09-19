@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import type { Metadata } from 'next';
-import { Archivo, Instrument_Serif } from 'next/font/google';
+import { Archivo, Fraunces } from 'next/font/google';
 
 import '@/app/globals.css';
 
@@ -11,11 +11,11 @@ const archivo = Archivo({
     display: 'swap'
 });
 
-const instrumentSerif = Instrument_Serif({
+const fraunces = Fraunces({
     subsets: ['latin'],
-    weight: '400',
+    weight: ['400', '500'],
     style: ['normal', 'italic'],
-    variable: '--font-instrument-serif',
+    variable: '--font-display',
     display: 'swap'
 });
 
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 const Layout = ({ children }: Readonly<{ children: ReactNode }>) => {
     return (
         <html suppressHydrationWarning lang='en' className='overflow-x-clip'>
-            <body className={`${archivo.variable} ${instrumentSerif.variable} overflow-x-hidden font-sans antialiased`}>
+            <body className={`${archivo.variable} ${fraunces.variable} overflow-x-hidden font-sans antialiased`}>
                 {children}
             </body>
         </html>

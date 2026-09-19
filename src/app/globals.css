@@ -221,7 +221,7 @@
 }
 
 .font-display {
-  font-family: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
+  font-family: var(--font-display), Georgia, 'Times New Roman', serif;
 }
 
 .vt-rl {
@@ -271,8 +271,8 @@ html.lenis body {
 }
 
 ::selection {
-  background: #a68a64;
-  color: #faf9f6;
+  background: #b08d57;
+  color: #f6f3ec;
 }
 
 @keyframes folio-marquee {

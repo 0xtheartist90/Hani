@@ -10,23 +10,11 @@ import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const YEARS = Array.from(
-    { length: SITE.endYear - SITE.startYear + 1 },
-    (_, i) => String(SITE.startYear + i).slice(2) as string
-);
+const CITIES = ['Beirut', 'Limassol', 'Ithaca', 'Washington', 'Toronto', 'Innisfil'];
 
 const ArrowForward = ({ className }: { className?: string }) => (
     <svg viewBox='0 0 24 24' fill='none' className={className} aria-hidden='true'>
         <path d='M16.175 13H4V11H16.175L10.575 5.4L12 4L20 12L12 20L10.575 18.6L16.175 13Z' fill='currentColor' />
-    </svg>
-);
-
-const ArrowUpRight = ({ className }: { className?: string }) => (
-    <svg viewBox='0 0 56 56' fill='none' className={className} aria-hidden='true'>
-        <path
-            d='M16.4366 42.3367L14 39.9001L36.9612 16.9167H16.0866V13.4167H42.9199V40.2501H39.4199V19.3755L16.4366 42.3367Z'
-            fill='currentColor'
-        />
     </svg>
 );
 
@@ -39,12 +27,10 @@ const HomeStory = () => {
     const yearRowRef = useRef<HTMLDivElement>(null);
     const yearStripRef = useRef<HTMLDivElement>(null);
     const expandRectRef = useRef<HTMLDivElement>(null);
-    const expandLeftRef = useRef<HTMLParagraphElement>(null);
-    const expandRightRef = useRef<HTMLParagraphElement>(null);
+    const expandCaptionRef = useRef<HTMLParagraphElement>(null);
     const navigateRef = useRef<(id: string) => void>(() => {});
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [hoveredWork, setHoveredWork] = useState<number | null>(null);
 
     /* lenis + gsap orchestration */
     useEffect(() => {
@@ -64,9 +50,11 @@ const HomeStory = () => {
 
         const applyTheme = (el: HTMLElement | undefined) => {
             if (!el) return;
-            header.style.setProperty('--header-bg', el.dataset.hbg ?? '#1f1d1b');
-            header.style.setProperty('--header-text', el.dataset.htext ?? '#ccc');
-            header.style.setProperty('--header-border', el.dataset.hborder ?? '#5a524d');
+            header.style.setProperty('--header-bg', el.dataset.hbg ?? '#10181d');
+            header.style.setProperty('--header-text', el.dataset.htext ?? '#cfc9bb');
+            header.style.setProperty('--header-border', el.dataset.hborder ?? '#41525c');
+            const indicator = header.querySelector('[data-chapter-indicator]');
+            if (indicator) indicator.textContent = el.dataset.chapter ?? '—';
         };
 
         const setProgress = (p: number) => {
@@ -85,8 +73,8 @@ const HomeStory = () => {
             .to(
                 counter,
                 {
-                    i: YEARS.length - 1,
-                    duration: 2,
+                    i: CITIES.length - 1,
+                    duration: 2.2,
                     ease: 'power2.inOut',
                     onUpdate: () => {
                         const strip = yearStripRef.current;
@@ -122,7 +110,8 @@ const HomeStory = () => {
                 const rise = unit.querySelectorAll('[data-anim-rise]');
                 const wipes = unit.querySelectorAll('[data-anim-wipe]');
                 const words = unit.querySelectorAll('[data-anim-word]');
-                if (!rise.length && !wipes.length && !words.length) return null;
+                const lines = unit.querySelectorAll('[data-anim-line]');
+                if (!rise.length && !wipes.length && !words.length && !lines.length) return null;
                 const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
                 if (words.length) {
                     gsap.set(words, { yPercent: 115 });
@@ -136,6 +125,10 @@ const HomeStory = () => {
                     gsap.set(imgs, { scale: 1.12 });
                     tl.to(wipes, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'power4.out' }, 0.1);
                     tl.to(imgs, { scale: 1, duration: 1.5 }, 0.1);
+                }
+                if (lines.length) {
+                    gsap.set(lines, { scaleX: 0, scaleY: 0 });
+                    tl.to(lines, { scaleX: 1, scaleY: 1, duration: 1.6, ease: 'power4.inOut' }, 0);
                 }
                 if (rise.length) {
                     gsap.set(rise, { y: 36, opacity: 0 });
@@ -174,6 +167,8 @@ const HomeStory = () => {
 
             const rect = expandRectRef.current;
             if (rect) gsap.set(rect, { scale: 0 });
+            const quoteWords = q('[data-expand-word]');
+            gsap.set(quoteWords, { yPercent: 115 });
 
             const tl = gsap.timeline({
                 defaults: { ease: 'none' },
@@ -197,9 +192,9 @@ const HomeStory = () => {
             });
 
             tl.to(track, { x: -journeyX, duration: journeyX });
-            if (rect) tl.to(rect, { scale: 1, duration: holdDur }, '>');
-            tl.to(expandLeftRef.current, { y: -window.innerHeight * 0.55, duration: holdDur }, '<');
-            tl.to(expandRightRef.current, { y: window.innerHeight * 0.55, duration: holdDur }, '<');
+            if (rect) tl.to(rect, { scale: 1, duration: holdDur * 0.55 }, '>');
+            tl.to(expandCaptionRef.current, { opacity: 0, duration: holdDur * 0.18 }, '<');
+            tl.to(quoteWords, { yPercent: 0, duration: holdDur * 0.32, stagger: holdDur * 0.028 }, '>');
             tl.to(track, { x: -totalX, duration: totalX - journeyX });
 
             masterST = tl.scrollTrigger ?? undefined;
@@ -293,15 +288,15 @@ const HomeStory = () => {
     const chapterHeading = 'font-display text-lg font-normal uppercase leading-none md:absolute md:left-32 md:top-[var(--vg)] md:text-2xl';
 
     return (
-        <div ref={rootRef} className='grain bg-[#edeae6] text-[#2e2b28]'>
+        <div ref={rootRef} className='grain bg-[#ece7dc] text-[#1e2a30]'>
             {/* ── Fixed header: top bar on mobile, left rail on desktop ── */}
             <header
                 ref={headerRef}
                 style={
                     {
-                        '--header-bg': '#262220',
-                        '--header-text': '#f3eee8',
-                        '--header-border': '#5a524d'
+                        '--header-bg': '#142028',
+                        '--header-text': '#f2eee3',
+                        '--header-border': '#41525c'
                     } as React.CSSProperties
                 }
                 className='fixed inset-x-0 top-0 z-[110] flex w-full flex-row items-center justify-between border-b border-[var(--header-border)] bg-[var(--header-bg)] px-5 py-4 text-[var(--header-text)] opacity-0 transition-[background-color,color,border-color] duration-500 ease-out md:inset-x-auto md:inset-y-0 md:right-0 md:bottom-0 md:w-16 md:flex-col md:justify-start md:border-b-0 md:border-l md:px-0 md:py-0'
@@ -309,7 +304,7 @@ const HomeStory = () => {
                 {/* scroll progress line */}
                 <div
                     ref={progressRef}
-                    className='pointer-events-none absolute -bottom-px left-0 z-10 h-px w-full origin-left bg-[#8A8178] will-change-transform md:top-0 md:bottom-auto md:h-dvh md:w-[2px] md:origin-top'
+                    className='pointer-events-none absolute -bottom-px left-0 z-10 h-px w-full origin-left bg-[#b08d57] will-change-transform md:top-0 md:bottom-auto md:h-dvh md:w-[2px] md:origin-top'
                     aria-hidden='true'
                 />
                 <button
@@ -332,6 +327,9 @@ const HomeStory = () => {
                         <rect y='22' width='32' height='2' fill='currentColor' />
                     </svg>
                 </button>
+                <div className='hidden h-14 w-full items-center justify-center border-b border-[var(--header-border)] font-display text-lg md:flex'>
+                    <span data-chapter-indicator>—</span>
+                </div>
                 <div className='hidden flex-1 flex-col items-center justify-between py-8 md:flex'>
                     <p className='vt-rl vt-reading-up text-[calc(1.1*var(--scale))] uppercase tracking-wide'>
                         Creating Destinations
@@ -350,7 +348,7 @@ const HomeStory = () => {
             {/* ── Fullscreen menu ── */}
             <div
                 id='fullscreen-menu'
-                className={`fixed inset-0 z-[120] flex flex-col bg-[#2e2b28] text-[#faf9f6] transition-[opacity,visibility] duration-500 ease-out ${
+                className={`fixed inset-0 z-[120] flex flex-col bg-[#1e2a30] text-[#f6f3ec] transition-[opacity,visibility] duration-500 ease-out ${
                     menuOpen ? 'visible opacity-100' : 'invisible opacity-0'
                 }`}
                 aria-label='Site navigation'
@@ -376,7 +374,7 @@ const HomeStory = () => {
                                 key={item.id}
                                 type='button'
                                 onClick={() => openNav(item.id)}
-                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(5.2*var(--scale))] text-[#faf9f6] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:flex-row-reverse md:text-right md:text-[min(11vh,8vw)] xl:gap-6'>
+                                className='group flex cursor-pointer items-center gap-5 text-left text-[calc(5.2*var(--scale))] text-[#f6f3ec] opacity-40 outline-none transition-opacity duration-300 hover:opacity-100 md:flex-row-reverse md:text-right md:text-[min(11vh,8vw)] xl:gap-6'>
                                 <span className='w-6 shrink-0 font-display text-[0.3em] font-normal leading-[1.2] md:w-auto'>
                                     {item.n}
                                 </span>
@@ -386,7 +384,7 @@ const HomeStory = () => {
                             </button>
                         ))}
                     </nav>
-                    <div className='flex flex-wrap gap-6 border-t border-[#5f5a54] pt-5 text-sm font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-16 md:border-0 md:pt-0'>
+                    <div className='flex flex-wrap gap-6 border-t border-[#41525c] pt-5 text-sm font-medium leading-[1.2] md:absolute md:bottom-[var(--vg)] md:right-16 md:border-0 md:pt-0'>
                         <a className='link-underline' href={SITE.linkedin} target='_blank' rel='noreferrer'>
                             LinkedIn
                         </a>
@@ -405,10 +403,11 @@ const HomeStory = () => {
                         <section
                             data-panel
                             data-panel-id='home'
-                            data-hbg='#3A3632'
-                            data-htext='#f3eee8'
-                            data-hborder='#5a524d'
-                            className='relative flex h-dvh w-screen shrink-0 flex-col overflow-hidden bg-[#262220] text-[#f3eee8]'
+                            data-chapter='—'
+                            data-hbg='#1b2a33'
+                            data-htext='#f2eee3'
+                            data-hborder='#41525c'
+                            className='relative flex h-dvh w-screen shrink-0 flex-col overflow-hidden bg-[#142028] text-[#f2eee3]'
                             aria-label='Introduction'>
                             {/* year counter — overlays the name slot, then slides away */}
                             <div className='absolute inset-x-5 bottom-8 z-[2] overflow-hidden md:inset-x-auto md:bottom-auto md:left-32 md:top-[var(--vg)]'>
@@ -416,15 +415,12 @@ const HomeStory = () => {
                                     ref={yearRowRef}
                                     className='font-display tabular-nums opacity-0'
                                     aria-hidden='true'>
-                                    <div className='flex h-[1em] w-max text-[calc(8.4*var(--scale))] leading-none md:text-[calc(18.1*var(--scale))]'>
-                                        <span className='flex h-full items-center'>20</span>
+                                    <div className='flex h-[1em] w-max text-[calc(6*var(--scale))] leading-none md:text-[calc(10.5*var(--scale))]'>
                                         <span className='block h-[1em] overflow-hidden'>
                                             <div ref={yearStripRef} className='will-change-transform'>
-                                                {YEARS.map((y) => (
-                                                    <span
-                                                        key={y}
-                                                        className='flex h-[1em] items-center leading-none tabular-nums'>
-                                                        {y}
+                                                {CITIES.map((city) => (
+                                                    <span key={city} className='flex h-[1em] items-center italic leading-none'>
+                                                        {city}
                                                     </span>
                                                 ))}
                                             </div>
@@ -436,7 +432,7 @@ const HomeStory = () => {
                             <div className='absolute inset-x-5 bottom-8 z-[1] md:inset-x-auto md:bottom-auto md:left-32 md:top-[var(--vg)]'>
                                 <h1
                                     data-name-heading
-                                    className='font-display text-[calc(10.5*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(17.5*var(--scale))]'>
+                                    className='font-display text-[calc(10.5*var(--scale))] uppercase leading-[0.9] tracking-[-0.04em] opacity-0 md:text-[calc(16*var(--scale))]'>
                                     {SITE.name.map((word, wi) => (
                                         <span
                                             key={word}
@@ -449,7 +445,7 @@ const HomeStory = () => {
                                 </h1>
                                 <p
                                     data-hero-fade
-                                    className='mt-6 hidden w-max border-t border-[#5a524d] pt-3 text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] opacity-0 md:block'>
+                                    className='mt-6 hidden w-max border-t border-[#41525c] pt-3 text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] opacity-0 md:block'>
                                     CEO — Friday Harbour Resort
                                 </p>
                             </div>
@@ -462,7 +458,7 @@ const HomeStory = () => {
                                 data-hero-fade
                                 className='absolute bottom-12 left-5 z-[1] hidden text-base font-normal leading-[1.5] opacity-0 md:bottom-[var(--vg)] md:left-32 md:block'>
                                 <span className='block'>25+ years in luxury hospitality</span>
-                                <span className='block text-[#f3eee8]/60'>70+ countries · 6 languages</span>
+                                <span className='block text-[#f2eee3]/60'>70+ countries · 6 languages</span>
                             </p>
                             <p
                                 data-hero-fade
@@ -486,10 +482,11 @@ const HomeStory = () => {
                         <section
                             data-panel
                             data-panel-id='about'
-                            data-hbg='#faf9f6'
-                            data-htext='#2e2b28'
-                            data-hborder='#b8b3ac'
-                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#faf9f6] text-[#2e2b28] md:h-dvh'
+                            data-chapter='01'
+                            data-hbg='#f6f3ec'
+                            data-htext='#1e2a30'
+                            data-hborder='#c9c1b0'
+                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#f6f3ec] text-[#1e2a30] md:h-dvh'
                             style={
                                 {
                                     '--portrait-h': 'calc(43 * var(--scale))',
@@ -521,10 +518,10 @@ const HomeStory = () => {
                                     {/* portrait placeholder */}
                                     <div className='relative w-full md:absolute md:bottom-[var(--vg)] md:left-32 md:z-0 md:h-[var(--portrait-h)] md:w-[var(--portrait-w)]'>
                                     <span
-                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#b8b3ac] md:block'
+                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#c9c1b0] md:block'
                                         aria-hidden='true'
                                     />
-                                    <div data-anim-wipe className='relative aspect-[3/4] w-full overflow-hidden bg-[#d8d1c8] md:aspect-auto md:size-full'>
+                                    <div data-anim-wipe className='relative aspect-[3/4] w-full overflow-hidden bg-[#ddd6c7] md:aspect-auto md:size-full'>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={PORTRAIT_IMAGE}
@@ -546,116 +543,141 @@ const HomeStory = () => {
                                     data-anim-rise
                                     className='hidden text-base font-normal leading-[1.5] md:absolute md:bottom-[calc(var(--vg)_+_calc(8*var(--scale)))] md:right-24 md:block md:max-w-[calc(32*var(--scale))] md:text-right'>
                                     <span className='block tracking-[0.06em]'>{ABOUT.beyond}</span>
-                                    <span className='block text-[#2e2b28]/60'>{ABOUT.beyondSub}</span>
+                                    <span className='block text-[#1e2a30]/60'>{ABOUT.beyondSub}</span>
                                 </p>
                             </div>
                         </section>
 
-                        {/* ─ Panel 3: "The Journey" cinematic expand ─ */}
+                        {/* ─ Panel 3: "An act of love" cinematic quote ─ */}
                         <section
                             data-panel
                             data-panel-id='journey'
-                            data-hbg='#faf9f6'
-                            data-htext='#2e2b28'
-                            data-hborder='#b8b3ac'
-                            className='relative flex h-[100svh] w-screen shrink-0 flex-col items-center justify-center overflow-hidden bg-[#faf9f6] px-5 py-14 text-[#2e2b28] md:h-dvh md:px-0 md:py-0'
-                            aria-label='The journey'>
+                            data-chapter='02'
+                            data-hbg='#f6f3ec'
+                            data-htext='#1e2a30'
+                            data-hborder='#c9c1b0'
+                            className='relative flex w-screen shrink-0 flex-col items-center justify-center gap-8 overflow-hidden bg-[#f6f3ec] px-5 py-14 text-[#1e2a30] md:h-dvh md:px-0 md:py-0'
+                            aria-label='Hospitality is an act of love'>
                             <div
                                 className='pointer-events-none absolute inset-0 z-10 hidden items-center justify-center md:flex'
                                 aria-hidden='true'>
                                 <div
                                     ref={expandRectRef}
-                                    className='h-dvh w-screen overflow-hidden will-change-transform'
-                                    style={{
-                                        transformOrigin: '50% 50%',
-                                        background: '#1f1d1b'
-                                    }}>
+                                    className='h-dvh w-screen overflow-hidden bg-[#10181d] will-change-transform'
+                                    style={{ transformOrigin: '50% 50%' }}>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={HERO_IMAGE}
                                         alt=''
-                                        className='size-full object-cover object-center'
+                                        className='size-full object-cover object-center opacity-80'
                                         loading='eager'
                                     />
+                                    <div className='absolute inset-0 bg-[#10181d]/35' aria-hidden='true' />
                                 </div>
                             </div>
-                            <div className='relative z-20 flex flex-1 items-center justify-center md:flex-initial md:flex-col md:gap-10 md:px-4'>
-                                <p
-                                    ref={expandLeftRef}
-                                    className='absolute bottom-[calc(50%_+_calc(1.6*var(--scale)))] left-1/2 z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:bottom-auto md:left-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))]'>
-                                    The
-                                </p>
-                                <div
-                                    className='pointer-events-none absolute left-1/2 top-1/2 z-10 h-[calc(15.2*var(--scale))] w-[calc(8.5*var(--scale))] -translate-x-1/2 -translate-y-1/2 overflow-hidden md:hidden'
-                                    aria-hidden='true'
-                                    style={{
-                                        background: '#1f1d1b'
-                                    }}>
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={HERO_IMAGE}
-                                        alt=''
-                                        className='size-full object-cover object-center'
-                                        loading='eager'
-                                    />
-                                </div>
-                                <p
-                                    ref={expandRightRef}
-                                    className='absolute left-1/2 top-[calc(50%_+_calc(1.6*var(--scale)))] z-20 -translate-x-1/2 font-display text-[calc(7*var(--scale))] font-normal uppercase leading-none will-change-transform md:relative md:left-auto md:top-auto md:translate-x-0 md:text-[calc(12.8*var(--scale))] md:italic'>
-                                    Journey
-                                </p>
+                            <p
+                                ref={expandCaptionRef}
+                                className='relative z-20 text-center text-[calc(1.1*var(--scale))] uppercase tracking-[0.2em] text-[#1e2a30]/70 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2'>
+                                Friday Harbour — Lake Simcoe
+                            </p>
+                            <div className='relative z-20 w-full overflow-hidden md:hidden' style={{ aspectRatio: '16 / 10' }}>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                    src={HERO_IMAGE}
+                                    alt=''
+                                    className='size-full object-cover object-center'
+                                    loading='eager'
+                                />
                             </div>
+                            <blockquote className='relative z-20 m-0 border-0 p-0 text-center not-italic md:absolute md:left-1/2 md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2'>
+                                <p className='font-display text-[calc(4.6*var(--scale))] leading-[1.05] tracking-[-0.02em] md:text-[calc(6.4*var(--scale))] md:text-[#f6f3ec]'>
+                                    {['Hospitality', 'is', 'an'].map((w) => (
+                                        <span key={w} className='mr-[0.28em] inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom'>
+                                            <span data-expand-word className='inline-block'>
+                                                {w}
+                                            </span>
+                                        </span>
+                                    ))}
+                                    <span className='mr-[0.28em] inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom'>
+                                        <span data-expand-word className='inline-block italic'>
+                                            act
+                                        </span>
+                                    </span>
+                                    {['of', 'love.'].map((w) => (
+                                        <span key={w} className='mr-[0.28em] inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom'>
+                                            <span data-expand-word className='inline-block italic'>
+                                                {w}
+                                            </span>
+                                        </span>
+                                    ))}
+                                </p>
+                                <footer className='mt-5 overflow-hidden'>
+                                    <span
+                                        data-expand-word
+                                        className='inline-block text-[calc(1.1*var(--scale))] uppercase tracking-[0.2em] text-[#1e2a30]/70 md:text-[#f6f3ec]/70'>
+                                        — Hani Roustom
+                                    </span>
+                                </footer>
+                            </blockquote>
                         </section>
 
-                        {/* ─ Panel 4: Defining chapters (work list) ─ */}
+                        {/* ─ Panel 4: career timeline ─ */}
                         <section
                             data-panel
                             data-panel-id='work'
-                            data-hbg='#edeae6'
-                            data-htext='#2e2b28'
-                            data-hborder='#b8b3ac'
-                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
-                            aria-label='Defining chapters'>
+                            data-chapter='02'
+                            data-hbg='#ece7dc'
+                            data-htext='#1e2a30'
+                            data-hborder='#c9c1b0'
+                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#ece7dc] text-[#1e2a30] md:h-dvh'
+                            aria-label='Career timeline'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
                                 <p data-anim-rise className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
-                                <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(76*var(--scale))]'>
-                                    <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
-                                        Defining chapters
-                                    </p>
-                                    <ul className='w-full text-[calc(3.4*var(--scale))] font-medium leading-[1.2] md:text-[calc(3.8*var(--scale))]'>
-                                        {JOURNEY_ITEMS.map((item, i) => (
-                                            <li
-                                                key={item.title}
-                                                data-anim-rise
-                                                className='group relative border-b border-[#b8b3ac] last:border-b-0'
-                                                onMouseEnter={() => setHoveredWork(i)}
-                                                onMouseLeave={() => setHoveredWork(null)}>
-                                                <div className='flex cursor-default items-center justify-between gap-4 py-2.5'>
-                                                    <span className='hidden w-10 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
-                                                        0{i + 1}
-                                                    </span>
-                                                    <span className='min-w-0 flex-1 whitespace-nowrap'>
-                                                        {item.title}
-                                                        <span className='mt-1 block whitespace-normal text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:hidden'>
-                                                            {item.meta}
-                                                        </span>
-                                                    </span>
-                                                    <span className='hidden shrink-0 text-right text-xs font-normal uppercase leading-[1.5] tracking-wide text-[#2e2b28]/60 md:block'>
-                                                        {item.meta.split(' · ').map((part) => (
-                                                            <span key={part} className='block'>
-                                                                {part}
-                                                            </span>
-                                                        ))}
-                                                    </span>
-                                                    <ArrowUpRight className='hidden size-8 shrink-0 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100 md:block md:size-14 md:-translate-x-2' />
+                                <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4] md:absolute md:left-32 md:top-[var(--vg)]'>
+                                    Two decades, four houses
+                                </p>
+                                {/* timeline */}
+                                <div className='relative flex flex-col gap-12 md:absolute md:left-32 md:right-24 md:top-1/2 md:h-[calc(58*var(--scale))] md:-translate-y-1/2 md:flex-row md:items-stretch md:gap-0'>
+                                    <span
+                                        data-anim-line
+                                        className='absolute left-1 top-0 h-full w-px origin-top bg-[#1e2a30]/25 md:left-0 md:top-1/2 md:h-px md:w-full md:origin-left'
+                                        aria-hidden='true'
+                                    />
+                                    {[...JOURNEY_ITEMS].reverse().map((item, i) => (
+                                        <div key={item.title} className='relative pl-8 md:flex-1 md:px-3 md:pl-3'>
+                                            <span
+                                                className='absolute left-1 top-2 size-2 -translate-x-1/2 rounded-full bg-[#1e2a30] md:left-1/2 md:top-1/2 md:-translate-y-1/2'
+                                                aria-hidden='true'
+                                            />
+                                            <div
+                                                className={`flex flex-col gap-2.5 md:absolute md:inset-x-3 ${
+                                                    i % 2 === 1
+                                                        ? 'md:top-[calc(50%_+_1.25rem)]'
+                                                        : 'md:bottom-[calc(50%_+_1.25rem)] md:flex-col-reverse'
+                                                }`}>
+                                                <div data-anim-rise className='w-full overflow-hidden' style={{ aspectRatio: '16 / 9' }}>
+                                                    {item.image ? (
+                                                        // eslint-disable-next-line @next/next/no-img-element
+                                                        <img
+                                                            src={item.image}
+                                                            alt={item.title}
+                                                            className='size-full object-cover object-center transition-transform duration-700 ease-out hover:scale-105'
+                                                            loading='eager'
+                                                        />
+                                                    ) : null}
                                                 </div>
-                                                <span
-                                                    className='pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-[#2e2b28] transition-transform duration-500 ease-out group-hover:scale-x-100'
-                                                    aria-hidden='true'
-                                                />
-                                            </li>
-                                        ))}
-                                    </ul>
+                                                <div data-anim-rise className='flex flex-col gap-1'>
+                                                    <p className='font-display text-[calc(2.6*var(--scale))] leading-none text-[#1e2a30]/60'>
+                                                        {item.year}
+                                                    </p>
+                                                    <p className='text-base font-medium leading-[1.2] md:text-lg'>{item.title}</p>
+                                                    <p className='text-xs font-normal uppercase tracking-wide text-[#1e2a30]/60'>
+                                                        {item.meta}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                                 <a
                                     data-anim-rise
@@ -668,42 +690,9 @@ const HomeStory = () => {
                                 </a>
                                 <p
                                     data-anim-rise
-                                    className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] text-[#1a1a1a] md:absolute md:bottom-[calc(var(--vg)_+_calc(3.4*var(--scale)))] md:left-32 md:max-w-[calc(29.4*var(--scale))]'>
-                                    ❋ Highlights from 25+ years in luxury hospitality
+                                    className='text-[calc(1.1*var(--scale))] uppercase leading-[1.3] md:absolute md:bottom-[var(--vg)] md:right-24 md:text-right'>
+                                    ❋ 25+ years in luxury hospitality
                                 </p>
-                                {/* hover preview */}
-                                <div
-                                    data-anim-rise
-                                    className='relative isolate hidden w-full max-w-[calc(40.1*var(--scale))] shrink-0 overflow-hidden md:absolute md:bottom-[var(--vg)] md:right-24 md:block'
-                                    aria-hidden='true'>
-                                    <svg viewBox='0 0 401 225' fill='none' className='h-auto w-full'>
-                                        <rect x='0.5' y='0.5' width='400' height='224' stroke='#B8B3AC' />
-                                        <path d='M0 1L401 224' stroke='#B8B3AC' />
-                                    </svg>
-                                    {JOURNEY_ITEMS.map((item, i) => (
-                                        <div
-                                            key={item.title}
-                                            className='pointer-events-none absolute inset-0 flex origin-center items-end overflow-hidden p-5 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)]'
-                                            style={{
-                                                background: '#d8d1c8',
-                                                opacity: hoveredWork === i ? 1 : 0,
-                                                transform: hoveredWork === i ? 'scale(1)' : 'scale(0.85)'
-                                            }}>
-                                            {item.image ? (
-                                                // eslint-disable-next-line @next/next/no-img-element
-                                                <img
-                                                    src={item.image}
-                                                    alt=''
-                                                    className='absolute inset-0 size-full object-cover object-center'
-                                                    loading='eager'
-                                                />
-                                            ) : null}
-                                            <span className='relative z-[1] font-display text-2xl uppercase leading-none text-[#faf9f6]/90 [text-shadow:0_1px_12px_rgba(0,0,0,.45)]'>
-                                                {item.title}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
                         </section>
 
@@ -711,10 +700,11 @@ const HomeStory = () => {
                         <section
                             data-panel
                             data-panel-id='services'
-                            data-hbg='#2e2b28'
-                            data-htext='#faf9f6'
-                            data-hborder='#5a524d'
-                            className='relative z-[1] flex w-screen shrink-0 flex-col overflow-hidden bg-[#2e2b28] pt-14 text-[#faf9f6] md:h-dvh md:w-max md:pl-16 md:pt-0'
+                            data-chapter='03'
+                            data-hbg='#1e2a30'
+                            data-htext='#f6f3ec'
+                            data-hborder='#41525c'
+                            className='relative z-[1] flex w-screen shrink-0 flex-col overflow-hidden bg-[#1e2a30] pt-14 text-[#f6f3ec] md:h-dvh md:w-max md:pl-16 md:pt-0'
                             aria-label='What I do'>
                             <div className='flex w-full flex-col md:min-h-0 md:w-max md:flex-1 md:flex-row md:items-stretch md:pl-16'>
                                 <div
@@ -736,12 +726,12 @@ const HomeStory = () => {
                                     <article
                                         key={service.num}
                                         data-reveal-unit
-                                        className={`group relative flex h-[70dvh] w-full flex-col justify-between gap-10 overflow-hidden border-t border-[#5f5a54] px-5 py-8 first-of-type:border-t md:h-full md:w-[calc(40*var(--scale))] md:shrink-0 md:gap-0 md:border-l md:border-t-0 md:p-[var(--vg)] ${si % 2 === 1 ? 'md:flex-col-reverse' : ''}`}>
+                                        className={`group relative flex h-[70dvh] w-full flex-col justify-between gap-10 overflow-hidden border-t border-[#41525c] px-5 py-8 first-of-type:border-t md:h-full md:w-[calc(40*var(--scale))] md:shrink-0 md:gap-0 md:border-l md:border-t-0 md:p-[var(--vg)] ${si % 2 === 1 ? 'md:flex-col-reverse' : ''}`}>
                                         <div
                                             className={`absolute inset-0 -z-[1] transition-[clip-path] duration-700 ease-[cubic-bezier(.3,.86,.36,.95)] group-hover:[clip-path:inset(0%_0%_0%)] ${si % 2 === 1 ? '[clip-path:inset(0%_0%_100%)]' : '[clip-path:inset(100%_0%_0%)]'}`}
                                             aria-hidden='true'>
-                                            <div className='absolute inset-0 z-[1] bg-[#1f1d1b]/60' />
-                                            <div className='size-full bg-[#1f1d1b]'>
+                                            <div className='absolute inset-0 z-[1] bg-[#10181d]/60' />
+                                            <div className='size-full bg-[#10181d]'>
                                                 {service.image ? (
                                                     // eslint-disable-next-line @next/next/no-img-element
                                                     <img
@@ -756,7 +746,7 @@ const HomeStory = () => {
                                         <p
                                             data-anim-rise
                                             className='font-display text-[calc(7*var(--scale))] leading-none text-transparent md:text-[calc(11*var(--scale))] md:leading-[1.1] md:tracking-[-0.024em]'
-                                            style={{ WebkitTextStroke: '1px #faf9f6' }}>
+                                            style={{ WebkitTextStroke: '1px #f6f3ec' }}>
                                             {service.num}
                                         </p>
                                         <p data-anim-rise className='font-display text-[calc(3.2*var(--scale))] font-normal uppercase leading-[1.3] md:text-[length:var(--display-fs)] md:leading-[1.2]'>
@@ -774,10 +764,11 @@ const HomeStory = () => {
                         <section
                             data-panel
                             data-panel-id='clients'
-                            data-hbg='#edeae6'
-                            data-htext='#2e2b28'
-                            data-hborder='#b8b3ac'
-                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
+                            data-chapter='04'
+                            data-hbg='#ece7dc'
+                            data-htext='#1e2a30'
+                            data-hborder='#c9c1b0'
+                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#ece7dc] text-[#1e2a30] md:h-dvh'
                             aria-label='Selected experiences'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-10 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
                                 <p data-anim-rise className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Record</p>
@@ -790,12 +781,12 @@ const HomeStory = () => {
                                             <li
                                                 key={exp.name}
                                                 data-anim-rise
-                                                className='flex cursor-default items-baseline gap-6 border-t border-[#b8b3ac] py-3.5 opacity-90 transition-[opacity,padding] duration-300 ease-out first:border-t-0 hover:pl-3 hover:opacity-100'>
-                                                <span className='hidden w-8 shrink-0 font-display text-base leading-none text-[#2e2b28]/50 md:block'>
+                                                className='flex cursor-default items-baseline gap-6 border-t border-[#c9c1b0] py-3.5 opacity-90 transition-[opacity,padding] duration-300 ease-out first:border-t-0 hover:pl-3 hover:opacity-100'>
+                                                <span className='hidden w-8 shrink-0 font-display text-base leading-none text-[#1e2a30]/50 md:block'>
                                                     0{ei + 1}
                                                 </span>
                                                 <span className='min-w-0 flex-1 whitespace-nowrap'>{exp.name}</span>
-                                                <span className='shrink-0 text-xs font-normal uppercase tracking-wide text-[#2e2b28]/60 md:text-sm'>
+                                                <span className='shrink-0 text-xs font-normal uppercase tracking-wide text-[#1e2a30]/60 md:text-sm'>
                                                     {exp.years}
                                                 </span>
                                             </li>
@@ -812,16 +803,16 @@ const HomeStory = () => {
                                                 <li
                                                     key={award.title}
                                                     data-anim-rise
-                                                    className='flex items-baseline justify-between gap-4 border-t border-[#b8b3ac] py-2.5 first:border-t-0'>
+                                                    className='flex items-baseline justify-between gap-4 border-t border-[#c9c1b0] py-2.5 first:border-t-0'>
                                                     <span className='min-w-0'>
                                                         <span className='block text-base font-medium leading-[1.3]'>
                                                             {award.title}
                                                         </span>
-                                                        <span className='block text-xs uppercase tracking-wide text-[#2e2b28]/60'>
+                                                        <span className='block text-xs uppercase tracking-wide text-[#1e2a30]/60'>
                                                             {award.org}
                                                         </span>
                                                     </span>
-                                                    <span className='shrink-0 font-display text-base text-[#2e2b28]/60'>
+                                                    <span className='shrink-0 font-display text-base text-[#1e2a30]/60'>
                                                         {award.year}
                                                     </span>
                                                 </li>
@@ -837,7 +828,7 @@ const HomeStory = () => {
                                                 <li
                                                     key={role}
                                                     data-anim-rise
-                                                    className='text-xs uppercase leading-[1.5] tracking-wide text-[#2e2b28]/75'>
+                                                    className='text-xs uppercase leading-[1.5] tracking-wide text-[#1e2a30]/75'>
                                                     {role}
                                                 </li>
                                             ))}
@@ -859,18 +850,19 @@ const HomeStory = () => {
                             id='contact'
                             data-panel
                             data-panel-id='contact'
-                            data-hbg='#1f1d1b'
-                            data-htext='#ccc'
-                            data-hborder='#5a524d'
-                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#1f1d1b] text-[#ccc] md:h-dvh'
+                            data-chapter='05'
+                            data-hbg='#10181d'
+                            data-htext='#cfc9bb'
+                            data-hborder='#41525c'
+                            className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#10181d] text-[#cfc9bb] md:h-dvh'
                             aria-label='Contact'>
                             <div
-                                className='pointer-events-none absolute inset-x-0 top-14 z-[2] overflow-hidden border-y border-[#3a3632] py-3 md:top-0'
+                                className='pointer-events-none absolute inset-x-0 top-14 z-[2] overflow-hidden border-y border-[#263740] py-3 md:top-0'
                                 aria-hidden='true'>
-                                <div className='marquee-track flex w-max whitespace-nowrap text-[calc(1.1*var(--scale))] uppercase tracking-[0.18em] text-[#ccc]/50 will-change-transform'>
+                                <div className='marquee-track flex w-max whitespace-nowrap text-[calc(1.1*var(--scale))] uppercase tracking-[0.18em] text-[#cfc9bb]/50 will-change-transform'>
                                     {Array.from({ length: 2 }).map((_, mi) => (
                                         <span key={mi} className='flex gap-12 pr-12'>
-                                            <span>Hospitality is an act of love</span>
+                                            <span>From Beirut to Lake Simcoe</span>
                                             <span>✳</span>
                                             <span>Success follows excellence</span>
                                             <span>✳</span>
@@ -886,10 +878,10 @@ const HomeStory = () => {
                                     className='relative w-40 shrink-0 md:absolute md:left-32 md:top-1/2 md:w-[calc(26*var(--scale))] md:-translate-y-1/2'
                                     style={{ aspectRatio: '600 / 777' }}>
                                     <span
-                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#5a524d] md:block'
+                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#41525c] md:block'
                                         aria-hidden='true'
                                     />
-                                    <div data-anim-wipe className='relative size-full overflow-hidden bg-[#2e2b28]'>
+                                    <div data-anim-wipe className='relative size-full overflow-hidden bg-[#1e2a30]'>
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src='/images/hani-roustom-2.jpg'
@@ -903,20 +895,23 @@ const HomeStory = () => {
                                 <div className='flex flex-col gap-6 md:absolute md:left-[62%] md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2 md:items-center md:gap-8'>
                                     <p
                                         data-anim-rise
-                                        className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#ccc]/70 md:text-center'>
+                                        className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#cfc9bb]/70 md:text-center'>
                                         № 05 — Where journeys become destinations
                                     </p>
-                                    <h2 className='font-display text-[calc(9*var(--scale))] uppercase leading-[0.92] tracking-[-0.04em] md:text-center md:text-[calc(15*var(--scale))] md:text-[#faf9f6]'>
+                                    <h2 className='font-display text-[calc(6.4*var(--scale))] uppercase leading-[0.95] tracking-[-0.03em] md:text-center md:text-[calc(9*var(--scale))] md:text-[#f6f3ec]'>
                                         <span className='block overflow-hidden pb-[0.08em] -mb-[0.08em]'>
-                                            <span data-anim-word className='block'>Next</span>
+                                            <span data-anim-word className='block'>Let’s build</span>
                                         </span>
                                         <span className='block overflow-hidden pb-[0.08em] -mb-[0.08em]'>
-                                            <span data-anim-word className='block italic'>chapter</span>
+                                            <span data-anim-word className='block italic'>the next</span>
+                                        </span>
+                                        <span className='block overflow-hidden pb-[0.08em] -mb-[0.08em]'>
+                                            <span data-anim-word className='block'>destination</span>
                                         </span>
                                     </h2>
                                     <a
                                         data-anim-rise
-                                        className='group mt-2 inline-flex w-fit items-center gap-4 border border-[#5a524d] px-6 py-4 text-lg font-medium leading-none transition-colors duration-300 hover:border-[#faf9f6] hover:bg-[#faf9f6] hover:text-[#1f1d1b] md:mt-4 md:px-8 md:py-5 md:text-[length:var(--cta-fs)]'
+                                        className='group mt-2 inline-flex w-fit items-center gap-4 border border-[#41525c] px-6 py-4 text-lg font-medium leading-none transition-colors duration-300 hover:border-[#f6f3ec] hover:bg-[#f6f3ec] hover:text-[#10181d] md:mt-4 md:px-8 md:py-5 md:text-[length:var(--cta-fs)]'
                                         href={`mailto:${SITE.email}`}>
                                         {SITE.email}
                                         <ArrowForward className='size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1' />
@@ -924,10 +919,10 @@ const HomeStory = () => {
                                 </div>
                                 {/* balanced bottom line: credits / copyright / social */}
                                 <div className='hidden md:absolute md:inset-x-0 md:bottom-8 md:flex md:items-end md:justify-between md:pl-32 md:pr-24'>
-                                    <p className='max-w-[calc(30*var(--scale))] text-[calc(1.1*var(--scale))] uppercase leading-[1.4] tracking-[0.1em] text-[#ccc]/60'>
+                                    <p className='max-w-[calc(30*var(--scale))] text-[calc(1.1*var(--scale))] uppercase leading-[1.4] tracking-[0.1em] text-[#cfc9bb]/60'>
                                         {FOOTER_NOTE}
                                     </p>
-                                    <p className='text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] text-[#ccc]/70'>
+                                    <p className='text-[calc(1.1*var(--scale))] uppercase tracking-[0.14em] text-[#cfc9bb]/70'>
                                         © 2026 — Hani Roustom
                                     </p>
                                     <nav className='text-base font-medium leading-[1.2]' aria-label='Social'>
@@ -953,12 +948,12 @@ const HomeStory = () => {
                                             LinkedIn
                                         </a>
                                     </nav>
-                                    <div className='flex flex-col gap-2 border-t border-[#3a3632] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
+                                    <div className='flex flex-col gap-2 border-t border-[#263740] pt-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         <div className='flex items-start justify-between'>
                                             <p>© 2026 — hani roustom</p>
                                             <p>creating destinations</p>
                                         </div>
-                                        <p className='text-[#ccc]/60'>{FOOTER_NOTE}</p>
+                                        <p className='text-[#cfc9bb]/60'>{FOOTER_NOTE}</p>
                                     </div>
                                 </div>
                             </div>
