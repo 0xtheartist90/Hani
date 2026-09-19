@@ -6,7 +6,7 @@ export const SITE = {
     timezoneLabel: '(GMT-5)',
     journeyLine: 'A journey through years of hospitality',
     email: 'hello@haniroustom.com',
-    linkedin: 'https://www.linkedin.com/in/haniroustom/',
+    linkedin: 'https://ca.linkedin.com/in/haniroustom',
     startYear: 2006,
     endYear: 2026
 };
