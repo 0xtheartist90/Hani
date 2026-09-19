@@ -139,7 +139,7 @@ const HomeStory = () => {
                 }
                 if (rise.length) {
                     gsap.set(rise, { y: 36, opacity: 0 });
-                    tl.to(rise, { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.12);
+                    tl.to(rise, { y: 0, opacity: 1, duration: 1.05, stagger: 0.12 }, 0.1);
                 }
                 const left = unit.getBoundingClientRect().left - trackRect0.left;
 
@@ -150,7 +150,7 @@ const HomeStory = () => {
             );
 
         const fireReveals = (x: number) => {
-            const edge = x + window.innerWidth * 0.82;
+            const edge = x + window.innerWidth * 0.6;
             for (const r of reveals) {
                 if (!r.played && r.left <= edge) {
                     r.played = true;
@@ -249,7 +249,7 @@ const HomeStory = () => {
                 triggers.push(
                     ScrollTrigger.create({
                         trigger: r.unit,
-                        start: 'top 78%',
+                        start: 'top 68%',
                         onEnter: () => {
                             if (!r.played) {
                                 r.played = true;
@@ -497,7 +497,7 @@ const HomeStory = () => {
                             }
                             aria-label='About'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className={chapterHeading}>№ 01 — The Person</p>
+                                <p data-anim-rise className={chapterHeading}>№ 01 — The Person</p>
                                 <div className='flex w-full flex-col gap-5 md:absolute md:right-24 md:top-[var(--vg)] md:z-10 md:w-[calc(58*var(--scale))]'>
                                     <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.2]'>
                                         {ABOUT.label}
@@ -615,7 +615,7 @@ const HomeStory = () => {
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
                             aria-label='Defining chapters'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-12 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
+                                <p data-anim-rise className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 02 — The Journey</p>
                                 <div className='flex flex-col gap-2.5 md:absolute md:left-32 md:top-[var(--vg)] md:w-full md:max-w-[calc(76*var(--scale))]'>
                                     <p data-anim-rise className='text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Defining chapters
@@ -671,6 +671,7 @@ const HomeStory = () => {
                                 </p>
                                 {/* hover preview */}
                                 <div
+                                    data-anim-rise
                                     className='relative isolate hidden w-full max-w-[calc(40.1*var(--scale))] shrink-0 overflow-hidden md:absolute md:bottom-[var(--vg)] md:right-24 md:block'
                                     aria-hidden='true'>
                                     <svg viewBox='0 0 401 225' fill='none' className='h-auto w-full'>
@@ -717,7 +718,7 @@ const HomeStory = () => {
                                 <div
                                     data-reveal-unit
                                     className='mb-12 flex flex-col gap-10 px-5 md:mb-0 md:w-[calc(63.6*var(--scale))] md:min-h-0 md:shrink-0 md:justify-between md:gap-0 md:px-0 md:py-[var(--vg)] md:pr-6'>
-                                    <p className='font-display text-lg font-normal uppercase leading-none md:text-2xl'>
+                                    <p data-anim-rise className='font-display text-lg font-normal uppercase leading-none md:text-2xl'>
                                         № 03 — The Craft
                                     </p>
                                     <div className='flex flex-col gap-5'>
@@ -777,7 +778,7 @@ const HomeStory = () => {
                             className='relative flex w-screen shrink-0 flex-col overflow-hidden bg-[#edeae6] text-[#2e2b28] md:h-dvh'
                             aria-label='Selected experiences'>
                             <div className='relative flex min-h-0 flex-1 flex-col gap-10 px-5 py-14 md:gap-0 md:px-0 md:py-0'>
-                                <p className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Record</p>
+                                <p data-anim-rise className='font-display text-lg font-normal uppercase leading-none md:absolute md:right-24 md:top-[var(--vg)] md:text-2xl'>№ 04 — The Record</p>
                                 <div className='w-full md:absolute md:left-32 md:top-[var(--vg)] md:max-w-[calc(48*var(--scale))]'>
                                     <p data-anim-rise className='mb-5 text-[calc(1.1*var(--scale))] uppercase leading-[1.4]'>
                                         Selected experiences
@@ -878,8 +879,26 @@ const HomeStory = () => {
                                 </div>
                             </div>
                             <div className='relative flex min-h-[calc(100dvh_-_calc(6*var(--scale)))] flex-1 flex-col justify-between gap-12 px-5 pb-5 pt-24 md:min-h-0 md:px-0 md:py-0'>
+                                {/* portrait anchor, left */}
+                                <div
+                                    className='relative w-40 shrink-0 md:absolute md:left-32 md:top-1/2 md:w-[calc(26*var(--scale))] md:-translate-y-1/2'
+                                    style={{ aspectRatio: '600 / 777' }}>
+                                    <span
+                                        className='pointer-events-none absolute -right-3 -top-3 hidden size-full border border-[#5a524d] md:block'
+                                        aria-hidden='true'
+                                    />
+                                    <div data-anim-wipe className='relative size-full overflow-hidden bg-[#2e2b28]'>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src='/images/hani-roustom-2.jpg'
+                                            alt='Hani Roustom'
+                                            className='size-full object-cover object-top'
+                                            loading='lazy'
+                                        />
+                                    </div>
+                                </div>
                                 {/* centered composition: label / headline / email cta */}
-                                <div className='flex flex-col gap-6 md:absolute md:left-1/2 md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2 md:items-center md:gap-8'>
+                                <div className='flex flex-col gap-6 md:absolute md:left-[62%] md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2 md:items-center md:gap-8'>
                                     <p
                                         data-anim-rise
                                         className='text-[calc(1.1*var(--scale))] font-normal uppercase tracking-[0.18em] leading-[1.4] text-[#ccc]/70 md:text-center'>
