@@ -5,7 +5,7 @@ export const SITE = {
     timezone: 'America/Toronto',
     timezoneLabel: '(GMT-5)',
     journeyLine: 'A journey through years of hospitality',
-    email: 'hello@haniroustom.com',
+    email: 'hroustom@fridayharbour.com',
     linkedin: 'https://ca.linkedin.com/in/haniroustom',
     startYear: 2006,
     endYear: 2026
